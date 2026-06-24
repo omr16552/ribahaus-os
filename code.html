@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RibaHaus OS | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Manrope:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#ffb59e",
+                        "on-tertiary-fixed-variant": "#842500",
+                        "surface-dim": "var(--surface-dim)",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-container-lowest": "var(--surface-container-lowest)",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-container-low": "var(--surface-container-low)",
+                        "secondary-container": "var(--secondary-container)",
+                        "error-container": "#93000a",
+                        "inverse-surface": "var(--inverse-surface)",
+                        "surface": "var(--surface)",
+                        "outline": "var(--outline)",
+                        "on-primary-fixed": "#ffffff",
+                        "primary": "#bac3ff",
+                        "primary-container": "#2d51ff",
+                        "on-surface-variant": "var(--on-surface-variant)",
+                        "on-background": "var(--on-background)",
+                        "secondary": "#c6c6c7",
+                        "on-secondary-container": "var(--on-secondary-container)",
+                        "on-tertiary-container": "#ffe1d8",
+                        "on-primary-fixed-variant": "#002eca",
+                        "primary-fixed": "#2d51ff",
+                        "surface-tint": "#bac3ff",
+                        "tertiary-fixed-dim": "#ffb59e",
+                        "inverse-primary": "#1e46f6",
+                        "on-primary-container": "#ffffff",
+                        "surface-container-highest": "var(--surface-container-highest)",
+                        "on-tertiary-fixed": "#3a0b00",
+                        "background": "var(--background)",
+                        "on-error": "#690005",
+                        "surface-bright": "var(--surface-bright)",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-container-high": "var(--surface-container-high)",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#bac3ff",
+                        "outline-variant": "var(--outline-variant)",
+                        "tertiary-container": "#bd3800",
+                        "on-tertiary": "#5e1700",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-surface": "var(--on-surface)",
+                        "on-primary": "#001e91",
+                        "error": "#ffb4ab",
+                        "inverse-on-surface": "var(--inverse-on-surface)",
+                        "surface-variant": "var(--surface-variant)",
+                        "on-secondary": "#2f3131",
+                        "surface-container": "var(--surface-container)"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "container-margin-desktop": "32px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "container-margin-mobile": "16px",
+                        "gutter": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        :root {
+            /* Dark Mode Defaults */
+            --background: #111317;
+            --on-background: #e2e2e8;
+            --surface: #111317;
+            --on-surface: #e2e2e8;
+            --surface-variant: #333539;
+            --on-surface-variant: #c4c5d9;
+            --surface-container-lowest: #0c0e12;
+            --surface-container-low: #1a1c20;
+            --surface-container: #1e2024;
+            --surface-container-high: #282a2e;
+            --surface-container-highest: #333539;
+            --surface-dim: #111317;
+            --surface-bright: #37393e;
+            --outline: #8e8fa2;
+            --outline-variant: #444656;
+            --inverse-surface: #e2e2e8;
+            --inverse-on-surface: #2f3035;
+            --on-secondary-container: #b4b5b5;
+            --secondary-container: #454747;
+        }
+
+        :root.light {
+            /* Light Mode Overrides */
+            --background: #f8f9fa;
+            --on-background: #111317;
+            --surface: #ffffff;
+            --on-surface: #111317;
+            --surface-variant: #f1f3f5;
+            --on-surface-variant: #5f6368;
+            --surface-container-lowest: #ffffff;
+            --surface-container-low: #f8f9fa;
+            --surface-container: #f1f3f5;
+            --surface-container-high: #e9ecef;
+            --surface-container-highest: #dee2e6;
+            --surface-dim: #dee2e6;
+            --surface-bright: #f8f9fa;
+            --outline: #dadce0;
+            --outline-variant: #e8eaed;
+            --inverse-surface: #202124;
+            --inverse-on-surface: #ffffff;
+            --on-secondary-container: #3c4043;
+            --secondary-container: #e8eaed;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--on-background);
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(30, 32, 36, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--outline-variant);
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--outline-variant);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--outline-variant);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-[14px] overflow-hidden h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-background border-b border-outline-variant flex justify-between items-center h-16 px-6 w-full fixed top-0 z-50">
+<div class="flex items-center gap-8">
+<h1 class="font-display-lg text-[24px] font-black text-on-background tracking-tighter">RibaHaus OS</h1>
+<nav class="hidden md:flex gap-2">
+<a class="bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 font-bold font-label-caps text-label-caps" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Projects</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Content</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Finance</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Proposals</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container border-none rounded-full px-4 py-1.5 text-[13px] text-on-surface placeholder:text-on-surface-variant w-64 focus:ring-1 focus:ring-primary-fixed" placeholder="Search resources..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-1.5 text-on-surface-variant text-[18px]">search</span>
+</div>
+<button class="bg-primary-fixed text-white font-bold px-6 py-1.5 rounded-full hover:bg-primary-container transition-all active:scale-95 text-label-caps font-label-caps">Create</button>
+<div class="flex gap-2 text-on-surface-variant">
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-all" id="theme-toggle" title="Toggle theme">
+<span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+</button>
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-all"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-all"><span class="material-symbols-outlined">settings</span></button>
+</div>
+<img alt="Director headshot" class="w-8 h-8 rounded-full border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZs_XYvAwthkIIGUL9xFHhTf5pWVtTEMgUkp7k9cIV6UU3gmoCB3qPsZDc7ffp8JEFn2fTruxg4kd73UQT-qCdbhKcPr3-bwib_pe_8jrvN_D0a9q6Uqy0v60MMRcUzmidR78-DHZFLR1Qmqa9DN6E5qn1dm7GhxDLYZ-el1ON27xPKz51CvceF0QIA6cAwd7R4mSY0KNIitgLS8wAgy4a-UYfutjio0KLMIoOu6vJrIUZhk6BiS2e7pQmHx02PpKkxvqrHGy7j0jB"/>
+</div>
+</header>
+<div class="flex flex-1 pt-16 h-full overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full w-64 bg-surface-container-lowest border-r border-outline-variant py-6 shrink-0">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">architecture</span>
+</div>
+<div>
+<div class="text-[16px] font-bold text-on-surface leading-tight">RibaHaus</div>
+<div class="font-label-caps text-[10px] text-on-surface-variant">Internal Admin</div>
+</div>
+</div>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-primary-fixed border-r-2 border-primary-fixed bg-surface-container-high px-6 py-3 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">dashboard</span> Overview
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">group</span> Clients
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Resources
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">account_tree</span> Workflows
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">analytics</span> Analytics
+                </a>
+</div>
+<div class="mt-auto px-6 space-y-1 border-t border-outline-variant pt-6">
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface px-4 py-2 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">archive</span> Archive
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface px-4 py-2 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined">support_agent</span> Support
+                </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Column -->
+<section class="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-10">
+<!-- Dashboard Header -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<div class="font-label-caps text-[11px] text-primary-fixed mb-1 uppercase tracking-widest">Agency OS v1.0</div>
+<h2 class="font-display-lg text-display-lg text-on-surface">My Dashboard</h2>
+<div class="text-[14px] text-on-surface-variant mt-1" id="dynamic-date">Monday, October 24, 2026</div>
+</div>
+<div class="hidden sm:flex gap-3">
+<button class="px-4 py-2 border border-outline-variant rounded-full text-on-surface text-label-caps hover:bg-surface-container-highest transition-all">Export Report</button>
+<button class="px-4 py-2 bg-primary-fixed text-white font-bold rounded-full text-label-caps hover:bg-primary-container transition-all">New Project</button>
+</div>
+</div>
+<!-- Hero Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<div class="lg:col-span-2 relative overflow-hidden glass-card rounded-xl p-8 flex flex-col justify-between group">
+<!-- Decorative Circles -->
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary-fixed opacity-5 rounded-full blur-3xl group-hover:opacity-10 transition-opacity"></div>
+<div class="absolute bottom-0 right-0 w-32 h-32 bg-primary-fixed opacity-10 rounded-full blur-2xl"></div>
+<div>
+<div class="bg-primary-fixed/10 text-primary-fixed font-label-caps text-[10px] w-fit px-3 py-1 rounded-full mb-6">LIVE STATUS</div>
+<h3 class="font-display-lg text-[40px] leading-tight mb-2 text-on-surface">Active projects: 4</h3>
+<p class="text-[16px] text-on-surface-variant max-w-sm">2 clients · Phase A &amp; B in progress across creative and digital departments.</p>
+</div>
+<div class="mt-12 flex gap-4">
+<div class="flex -space-x-3">
+<img alt="Designer portrait" class="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASVDgWN_ofUvp7si3Q0LRxZd2GNlc_ZDZlNrKxXwfyJwXL6EC-dI89RgxUvsX90wHAxKdJOi8fq3A4dZmAFh67SkEi_DWKsAviym4Ae3BRfBnlJ0eoRc8B9KKd7MsbhzNxpi6PX4Y4CrdWFHTUiQUcfIbCllQCG28s3BJjACBvOKQV1B9tiXfTHu11KWvRZRLXiFkIlMHaIJUmbIqHP4tPFx_djcvJw6yadax_LnzoaC2drY6SxOCDK5QfyoV42MHAsqi_OHdscENV"/>
+<img alt="Producer portrait" class="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzHe238rFEwcHB5K706LBdLCpWjGdLncd680erXo7FeKbpnt1g1_hwFXheAaZfjtEXbPN9iE_6K2lKFXgUWJ_J4H-iBXEKLAACz9Q4DbXm8RwmrJYZEC6RcA5h_fMDna_BZp0NvggJEbURnj-lM-B9aqjaGNEeme8rJSiz16Nqq6bkfpqauJkUiC5F0ugGudBDKSEQPrV38UpzFuAxEd7-gxcRF_aqq05_MpmcrY00Z2b9zulZuKZIfLPIDfPuo-PKjnJRi9Ie0833"/>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 border-background flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant">+3</div>
+</div>
+<button class="flex items-center gap-2 text-primary-fixed font-bold text-label-caps hover:gap-3 transition-all">View all work <span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="glass-card rounded-xl p-6 flex flex-col justify-between h-1/2">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary-fixed">assignment_turned_in</span>
+<span class="text-on-surface-variant font-label-caps text-[10px]">+2 today</span>
+</div>
+<div>
+<div class="font-display-lg text-[40px] leading-none mb-1 text-on-surface">7</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Deliverables due</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-6 flex flex-col justify-between h-1/2">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant">send</span>
+<span class="text-on-surface-variant font-label-caps text-[10px]">Pending</span>
+</div>
+<div>
+<div class="font-display-lg text-[40px] leading-none mb-1 text-on-surface">3</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Open Proposals</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="glass-card rounded-xl p-8">
+<div class="flex justify-between items-center mb-8">
+<h4 class="text-[20px] font-bold text-on-surface">Deliverable velocity</h4>
+<select class="bg-transparent border-none text-label-caps text-on-surface-variant focus:ring-0 cursor-pointer">
+<option class="bg-surface">Last 30 days</option>
+<option class="bg-surface">Last 60 days</option>
+</select>
+</div>
+<div class="h-48 flex items-end gap-3 px-2">
+<div class="flex-1 bg-surface-container-highest rounded-t h-[40%] hover:bg-primary-fixed/20 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t h-[65%] hover:bg-primary-fixed/20 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-primary-fixed rounded-t h-[90%] hover:brightness-110 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t h-[55%] hover:bg-primary-fixed/20 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t h-[75%] hover:bg-primary-fixed/20 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t h-[45%] hover:bg-primary-fixed/20 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-primary-fixed rounded-t h-[80%] hover:brightness-110 transition-all cursor-pointer"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t h-[30%] hover:bg-primary-fixed/20 transition-all cursor-pointer"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-label-caps text-on-surface-variant px-1">
+<span>WK 38</span>
+<span>WK 39</span>
+<span>WK 40</span>
+<span>WK 41</span>
+<span>WK 42</span>
+<span>WK 43</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-8 flex items-center justify-between">
+<div class="max-w-[160px]">
+<h4 class="text-[20px] font-bold text-on-surface mb-2">Team capacity</h4>
+<p class="text-[12px] text-on-surface-variant mb-6">Across 12 core team members currently in-house.</p>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary-fixed"></div>
+<span class="font-label-caps text-[10px] text-on-surface">73% AVERAGE</span>
+</div>
+</div>
+<div class="relative w-40 h-40">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="2.5"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2d51ff" stroke-dasharray="73, 100" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-[32px] text-on-surface leading-none">73%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h4 class="text-[20px] font-bold text-on-surface">Recent Activity</h4>
+<button class="text-on-surface-variant hover:text-primary-fixed font-label-caps text-label-caps transition-colors">Clear all</button>
+</div>
+<div class="divide-y divide-outline-variant">
+<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">collections</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Backpack carousel</div>
+<div class="text-[12px] text-on-surface-variant">Asset set v2.1 uploaded to SY project</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">APPROVED</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">2 mins ago</span>
+</div>
+</div>
+<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Proposal submitted</div>
+<div class="text-[12px] text-on-surface-variant">Phase 2 expansion for BlueRock Client</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">SUBMITTED</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">1 hour ago</span>
+</div>
+</div>
+<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Moodboard revision</div>
+<div class="text-[12px] text-on-surface-variant">V3 update requested by BM Creative Lead</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">REVISION</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">3 hours ago</span>
+</div>
+</div>
+<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">sync</span>
+</div>
+<div>
+<div class="font-bold text-on-surface">Content calendar sync</div>
+<div class="text-[12px] text-on-surface-variant">Instagram &amp; TikTok schedule updated</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">SYNCED</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">5 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column (Side Panel) -->
+<aside class="hidden xl:flex w-[320px] shrink-0 border-l border-outline-variant bg-surface-container-lowest flex-col overflow-y-auto custom-scrollbar p-6 gap-8">
+<div>
+<div class="flex justify-between items-center mb-6">
+<h5 class="text-[18px] font-bold text-on-surface">Active Projects</h5>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-all"><span class="material-symbols-outlined text-[18px]">add</span></button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-all"><span class="material-symbols-outlined text-[18px]">north_east</span></button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="flex justify-between mb-3">
+<span class="font-label-caps text-[11px] text-primary-fixed">SY-2026</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant">84%</span>
+</div>
+<div class="font-bold text-on-surface mb-3 group-hover:text-primary-fixed transition-colors">Brand Campaign</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mb-3">
+<div class="bg-primary-fixed h-1 rounded-full" style="width: 84%;"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] font-label-caps text-on-surface-variant">
+<span>12 Oct · 2026</span>
+<div class="flex -space-x-2">
+<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg0Ckq9FXtrXTbBSLlzpwHJH_JMlJczeP7bKYE1JBElqWfWfh2Y4p6VSI7wFRrGB870AS6tIcsETnt3-Xpjs-GL9xq_vgp_zBtiMPg5usacNCN02ILIZYaw83x9eWHUMAyNULmckDKdeu8h4Mfl75ZYxLJlXcnmB7wQcMPDHbLZuTv-vn3wifC0iGFTWCzV4VjVVwyQuThgfhKii4_jd7QihH5lP2Q6cFkGruyPPcClJFAVOD9ej0bldAbbCkJZhskIkHoUFponUb_"/>
+<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcXO_0s7rZmvnpM9jUyT09tvAwMONPyFouKFJtSKmjKJ2C9YT58DbktbnLc8KM0Z5jy6CqEufICI6nj5_DWLkotNOzUWjlagG-N6qbAumYgJ_Ssiy15dFpcDT4Bc7HZ9P8567UGEH6Gnk3IIrT1Up5oISdijvuFigXdlpG1mXZ05SvphVFbq1c79hZBB11YYIYyVFT5KGsYldeUdSAWhTY9REx8tbayHOfI70fS6FugJBllSGrY4NWzlZcG7MtvlTqlDJZ7FDXNSQS"/>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="flex justify-between mb-3">
+<span class="font-label-caps text-[11px] text-primary-fixed">BM-ID</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant">32%</span>
+</div>
+<div class="font-bold text-on-surface mb-3 group-hover:text-primary-fixed transition-colors">Brand Identity System</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mb-3">
+<div class="bg-primary-fixed h-1 rounded-full" style="width: 32%;"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] font-label-caps text-on-surface-variant">
+<span>28 Oct · 2026</span>
+<div class="flex -space-x-2">
+<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHwyUI_5k8ZzglPUKf7ejvXEJ9SihA8O_WJn0nvhmUtd0s18RXhBiXObL2-OlX7lngNun2lei_NmvQDZb6UY8oYDW3rKR9-m_k3jBOhR3d0aEGyPLlqZTpxr5qTfQZLNiGSOkml-D-vozovgGiaWU2-NVCz0VBtzuz9mFB8itrnAjLZ2cPiTM-CdZZ1H0_qpgLqRlsfk5kCxZDTZx5Mfr30kFeDPMls1FEUqMnuWS2m6aQRTTudkyYztYxB4zVnZArDhKgkJC4yRC0"/>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer group">
+<div class="flex justify-between mb-3">
+<span class="font-label-caps text-[11px] text-primary-fixed">SY-CC</span>
+<span class="font-label-caps text-[11px] text-on-surface-variant">61%</span>
+</div>
+<div class="font-bold text-on-surface mb-3 group-hover:text-primary-fixed transition-colors">Content Calendar Q3</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mb-3">
+<div class="bg-primary-fixed h-1 rounded-full" style="width: 61%;"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] font-label-caps text-on-surface-variant">
+<span>04 Nov · 2026</span>
+<div class="flex -space-x-2">
+<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGCjio7Tay7P6d_PThB6vzxw3lWkXhs2vGiisfffiEt87eoSxi8Cq9qWqjvuqUPVNVLlQGhc1rySM4p9Ui_sM0O43m1XUwxYsu6rMvkbxUx_jw8eD85jHiDz4aglrqa2cVlQxCSZ2msy70tuQiiQ3vEBU9QjK9qR4Ktt_JWIqavP69xZ5Cusc_FZRQMQhVxhKnaINpTq_ZrevC2sRztbjwm0lRTfaMurZnHMeK-vLDZYd9He-SEfBMBLfK8_pIAsD_S9MW-I83YJHX"/>
+<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgUerGcBZ8vpf7_Th-kZ9Ht7URz2O8dOQhVurKhbTENNmKNIhhLWXvSmXp0ZabWdThFA8R-XCVrZZoN5SKXuizpmyWIURhr2xF4qpj2ktKHQVTc4F_p8Id2iMJF-4bInUt7ymt4IbtgAqPdjiYLKxwH-da6hasuLQIXMgo-ZIRbZfsoh2vMP8wHMN9J1TL91v0qr-F9lR_IITNRDLxh3zyy8RhmCXMHwkbYiTN2M9NZLn_apyhgjUZugzkcRyIlBKDQiIL3gz0ND84"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-6">
+<h5 class="text-[18px] font-bold text-on-surface">Upcoming</h5>
+<button class="text-on-surface-variant hover:text-primary-fixed font-label-caps text-[11px] transition-colors">See all →</button>
+</div>
+<div class="space-y-1">
+<div class="flex items-center justify-between p-3 rounded hover:bg-surface-container-high transition-all cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">JD</div>
+<span class="text-[13px] text-on-surface group-hover:text-primary-fixed transition-colors">Carousel slide</span>
+</div>
+<span class="font-label-caps text-[9px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">Oct 25</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded hover:bg-surface-container-high transition-all cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">MK</div>
+<span class="text-[13px] text-on-surface group-hover:text-primary-fixed transition-colors">Moodboard</span>
+</div>
+<span class="font-label-caps text-[9px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">Oct 26</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded hover:bg-surface-container-high transition-all cursor-pointer group">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">AL</div>
+<span class="text-[13px] text-on-surface group-hover:text-primary-fixed transition-colors">Strategy deck</span>
+</div>
+<span class="font-label-caps text-[9px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">Oct 27</span>
+</div>
+</div>
+</div>
+<div class="mt-auto bg-primary-fixed/5 rounded-xl p-6 border border-primary-fixed/20">
+<h6 class="text-[16px] font-bold text-primary-fixed mb-2">Upgrade Storage</h6>
+<p class="text-[12px] text-on-surface-variant mb-4">You've used 82% of your agency workspace storage.</p>
+<button class="w-full bg-primary-fixed text-white font-bold py-2 rounded text-label-caps">View Plans</button>
+</div>
+</aside>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container flex justify-around items-center px-4 border-t border-outline-variant z-50">
+<button class="text-primary-fixed flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-caps">Home</span>
+</button>
+<button class="text-on-surface-variant flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="text-[10px] font-label-caps">Work</span>
+</button>
+<button class="text-on-surface-variant flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-label-caps">Clients</span>
+</button>
+<button class="text-on-surface-variant flex flex-col items-center gap-1">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-label-caps">Profile</span>
+</button>
+</nav>
+<script>
+    // Theme toggle logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+        if (htmlElement.classList.contains('dark')) {
+            htmlElement.classList.remove('dark');
+            htmlElement.classList.add('light');
+            themeIcon.textContent = 'dark_mode';
+        } else {
+            htmlElement.classList.remove('light');
+            htmlElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        }
+    });
+
+    // Set dynamic date
+    const dateElement = document.getElementById('dynamic-date');
+    const now = new Date();
+    const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+    dateElement.textContent = now.toLocaleDateString('en-US', options);
+
+    // Micro-interaction: Chart hover effect simulation
+    const barChart = document.querySelectorAll('.h-48 > div');
+    barChart.forEach(bar => {
+        bar.addEventListener('mouseenter', () => {
+            bar.style.transform = 'scaleY(1.05)';
+        });
+        bar.addEventListener('mouseleave', () => {
+            bar.style.transform = 'scaleY(1)';
+        });
+    });
+</script>
+</body></html>
