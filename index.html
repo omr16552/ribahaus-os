@@ -194,7 +194,7 @@
 <button class="p-2 hover:bg-surface-container-highest rounded-full transition-all"><span class="material-symbols-outlined">notifications</span></button>
 <button class="p-2 hover:bg-surface-container-highest rounded-full transition-all"><span class="material-symbols-outlined">settings</span></button>
 </div>
-<img alt="Director headshot" class="w-8 h-8 rounded-full border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZs_XYvAwthkIIGUL9xFHhTf5pWVtTEMgUkp7k9cIV6UU3gmoCB3qPsZDc7ffp8JEFn2fTruxg4kd73UQT-qCdbhKcPr3-bwib_pe_8jrvN_D0a9q6Uqy0v60MMRcUzmidR78-DHZFLR1Qmqa9DN6E5qn1dm7GhxDLYZ-el1ON27xPKz51CvceF0QIA6cAwd7R4mSY0KNIitgLS8wAgy4a-UYfutjio0KLMIoOu6vJrIUZhk6BiS2e7pQmHx02PpKkxvqrHGy7j0jB"/>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-[11px] font-label-caps text-on-surface-variant" id="backend-status" title="Vercel API connection status"><span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant" id="backend-status-dot"></span><span id="backend-status-text">Backend: checking...</span></div><img alt="Director headshot" class="w-8 h-8 rounded-full border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZs_XYvAwthkIIGUL9xFHhTf5pWVtTEMgUkp7k9cIV6UU3gmoCB3qPsZDc7ffp8JEFn2fTruxg4kd73UQT-qCdbhKcPr3-bwib_pe_8jrvN_D0a9q6Uqy0v60MMRcUzmidR78-DHZFLR1Qmqa9DN6E5qn1dm7GhxDLYZ-el1ON27xPKz51CvceF0QIA6cAwd7R4mSY0KNIitgLS8wAgy4a-UYfutjio0KLMIoOu6vJrIUZhk6BiS2e7pQmHx02PpKkxvqrHGy7j0jB"/>
 </div>
 </header>
 <div class="flex flex-1 pt-16 h-full overflow-hidden">
@@ -566,5 +566,22 @@
             bar.style.transform = 'scaleY(1)';
         });
     });
+// Backend connectivity check (RibaHaus OS phase 2)
+(function() {
+    const statusText = document.getElementById('backend-status-text');
+    const statusDot = document.getElementById('backend-status-dot');
+    fetch('https://ribahaus-os.vercel.app/api/health')
+        .then(function(res) { return res.ok ? res.json() : Promise.reject(res.status); })
+        .then(function(data) {
+            statusText.textContent = 'Backend: connected';
+            statusDot.classList.remove('bg-on-surface-variant');
+            statusDot.classList.add('bg-green-500');
+        })
+        .catch(function() {
+            statusText.textContent = 'Backend: offline';
+            statusDot.classList.remove('bg-on-surface-variant');
+            statusDot.classList.add('bg-red-500');
+        });
+})();
 </script>
 </body></html>
