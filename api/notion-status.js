@@ -1,3 +1,4 @@
+// redeploy trigger: pick up latest NOTION_API_KEY
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://omr16552.github.io');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
