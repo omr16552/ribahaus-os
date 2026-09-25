@@ -209,20 +209,20 @@ border-radius: 10px;
 <div class="font-label-caps text-[10px] text-on-surface-variant">Internal Admin</div>
 </div>
 </div>
-<div class="flex-1 space-y-1">
-<a class="flex items-center gap-3 text-primary-fixed border-r-2 border-primary-fixed bg-surface-container-high px-6 py-3 font-label-caps text-label-caps" href="#">
+<div class="flex-1 space-y-1" id="sidebar-nav">
+<a class="sidebar-nav-link flex items-center gap-3 text-primary-fixed border-r-2 border-primary-fixed bg-surface-container-high px-6 py-3 font-label-caps text-label-caps" data-view="overview" href="#">
 <span class="material-symbols-outlined">dashboard</span> Overview
 </a>
-<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="clients" href="#">
 <span class="material-symbols-outlined">group</span> Clients
 </a>
-<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="resources" href="#">
 <span class="material-symbols-outlined">inventory_2</span> Resources
 </a>
-<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="workflows" href="#">
 <span class="material-symbols-outlined">account_tree</span> Workflows
 </a>
-<a class="flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" href="#">
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="analytics" href="#">
 <span class="material-symbols-outlined">analytics</span> Analytics
 </a>
 </div>
@@ -242,15 +242,16 @@ border-radius: 10px;
 <!-- Dashboard Header -->
 <div class="mb-10 flex justify-between items-end">
 <div>
-<div class="font-label-caps text-[11px] text-primary-fixed mb-1 uppercase tracking-widest">Agency OS v1.0</div>
-<h2 class="font-display-lg text-display-lg text-on-surface">My Dashboard</h2>
+<div class="font-label-caps text-[11px] text-primary-fixed mb-1 uppercase tracking-widest" id="page-eyebrow">Agency OS v1.0</div>
+<h2 class="font-display-lg text-display-lg text-on-surface" id="page-title">My Dashboard</h2>
 <div class="text-[14px] text-on-surface-variant mt-1" id="dynamic-date">Monday, October 24, 2026</div>
 </div>
 <div class="hidden sm:flex gap-3">
-<button class="px-4 py-2 border border-outline-variant rounded-full text-on-surface text-label-caps hover:bg-surface-container-highest transition-all">Export Report</button>
-<button class="px-4 py-2 bg-primary-fixed text-white font-bold rounded-full text-label-caps hover:bg-primary-container transition-all">New Project</button>
+<button class="px-4 py-2 border border-outline-variant rounded-full text-on-surface text-label-caps hover:bg-surface-container-highest transition-all" id="page-action-secondary">Export Report</button>
+<button class="px-4 py-2 bg-primary-fixed text-white font-bold rounded-full text-label-caps hover:bg-primary-container transition-all" id="page-action-primary">New Project</button>
 </div>
 </div>
+<div class="view-panel" id="view-overview">
 <!-- Hero Row -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 <div class="lg:col-span-2 relative overflow-hidden glass-card rounded-xl p-8 flex flex-col justify-between group">
@@ -412,9 +413,60 @@ border-radius: 10px;
 </div>
 </div>
 </div>
+</div>
+<!-- CRM / Clients View -->
+<div class="view-panel hidden" id="view-clients">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="crm-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Open pipeline value</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-value">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Leads</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-leads">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">In proposal</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-proposal">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Active + retainer clients</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-active">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="crm-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="crm-banner-text"></span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4" id="crm-board"></div>
+<button class="mt-6 text-on-surface-variant hover:text-on-surface font-label-caps text-label-caps flex items-center gap-2" id="crm-lost-toggle">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Show lost deals (<span id="crm-lost-count">0</span>)</span>
+</button>
+<div class="hidden mt-4 glass-card rounded-xl divide-y divide-outline-variant" id="crm-lost-list"></div>
+</div>
+<!-- Workflows View -->
+<div class="view-panel hidden" id="view-workflows">
+<div class="mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span>Showing example tasks. Your real Central Tasks database in Notion is currently empty &mdash; once you start adding tasks there, this board will sync automatically.</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="workflows-board"></div>
+</div>
+<!-- Resources View -->
+<div class="view-panel hidden" id="view-resources">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" id="resources-board"></div>
+</div>
+<!-- Analytics View -->
+<div class="view-panel hidden" id="view-analytics">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="analytics-stats"></div>
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Deeper analytics (revenue trend, client acquisition, deliverable throughput) will wire up once the CRM and Workflows data have a few weeks of real history behind them.
+</div>
+</div>
 </section>
 <!-- Right Column (Side Panel) -->
-<aside class="hidden xl:flex w-[320px] shrink-0 border-l border-outline-variant bg-surface-container-lowest flex-col overflow-y-auto custom-scrollbar p-6 gap-8">
+<aside class="hidden xl:flex w-[320px] shrink-0 border-l border-outline-variant bg-surface-container-lowest flex-col overflow-y-auto custom-scrollbar p-6 gap-8" id="right-panel">
 <div>
 <div class="flex justify-between items-center mb-6">
 <h5 class="text-[18px] font-bold text-on-surface">Active Projects</h5>
@@ -688,6 +740,238 @@ thinkingBubble.textContent = 'Could not reach the assistant backend: ' + err.mes
 sending = false;
 });
 });
+})();
+
+// View switching + Clients/Workflows/Resources/Analytics pages (RibaHaus OS UI/CRM pass)
+(function() {
+var API_BASE = 'https://ribahaus-os.vercel.app/api';
+
+function escapeHtml(str) {
+if (str === null || str === undefined) return '';
+return String(str)
+.replace(/&/g, '&amp;')
+.replace(/</g, '&lt;')
+.replace(/>/g, '&gt;')
+.replace(/"/g, '&quot;');
+}
+
+function formatMoney(n) {
+if (n === null || n === undefined || isNaN(n)) return '$0';
+return '$' + Math.round(n).toLocaleString('en-US');
+}
+
+var VIEWS = {
+overview: { eyebrow: 'Agency OS v1.0', title: 'My Dashboard', primary: 'New Project', secondary: 'Export Report' },
+clients: { eyebrow: 'Sales CRM', title: 'Clients', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadCRM },
+workflows: { eyebrow: 'Delegation Hub', title: 'Workflows', primary: 'New Task', secondary: 'Filter', onShow: renderWorkflows },
+resources: { eyebrow: 'Agency Library', title: 'Resources', primary: 'Upload', secondary: 'New Folder', onShow: renderResources },
+analytics: { eyebrow: 'Performance', title: 'Analytics', primary: 'Refresh', secondary: 'Export Report', onShow: renderAnalytics }
+};
+
+function switchView(name) {
+if (!VIEWS[name]) name = 'overview';
+document.querySelectorAll('.view-panel').forEach(function(v) { v.classList.add('hidden'); });
+var el = document.getElementById('view-' + name);
+if (el) el.classList.remove('hidden');
+
+document.querySelectorAll('.sidebar-nav-link').forEach(function(a) {
+var active = a.getAttribute('data-view') === name;
+a.classList.toggle('text-primary-fixed', active);
+a.classList.toggle('border-r-2', active);
+a.classList.toggle('border-primary-fixed', active);
+a.classList.toggle('bg-surface-container-high', active);
+a.classList.toggle('text-on-surface-variant', !active);
+});
+
+var cfg = VIEWS[name];
+document.getElementById('page-eyebrow').textContent = cfg.eyebrow;
+document.getElementById('page-title').textContent = cfg.title;
+document.getElementById('page-action-primary').textContent = cfg.primary;
+document.getElementById('page-action-secondary').textContent = cfg.secondary;
+
+var rightPanel = document.getElementById('right-panel');
+if (rightPanel) rightPanel.style.display = (name === 'overview') ? '' : 'none';
+
+if (cfg.onShow && !cfg._loaded) {
+cfg._loaded = true;
+cfg.onShow();
+}
+}
+
+document.querySelectorAll('.sidebar-nav-link').forEach(function(a) {
+a.addEventListener('click', function(e) {
+e.preventDefault();
+switchView(a.getAttribute('data-view'));
+});
+});
+
+// ---- Clients / CRM ----
+var CRM_COLUMNS = [
+{ key: 'lead', label: 'Lead', dot: 'bg-pink-400' },
+{ key: 'proposal', label: 'Proposal', dot: 'bg-blue-400' },
+{ key: 'active_client', label: 'Active Client', dot: 'bg-green-400' },
+{ key: 'retainer', label: 'Retainer / Renewal', dot: 'bg-amber-400' }
+];
+
+function crmCardHtml(row) {
+var priorityColor = row.priority === 'High' ? 'bg-red-500/10 text-red-400' : row.priority === 'Medium' ? 'bg-orange-500/10 text-orange-400' : 'bg-surface-container-highest text-on-surface-variant';
+return '' +
+'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(row.name) + '</div>' +
+(row.company ? '<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(row.company) + '</div>' : '<div class="mb-3"></div>') +
+'<div class="flex flex-wrap items-center gap-2">' +
+(row.priority ? '<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] ' + priorityColor + '">' + escapeHtml(row.priority).toUpperCase() + '</span>' : '') +
+(row.industry ? '<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-caps text-[9px]">' + escapeHtml(row.industry).toUpperCase() + '</span>' : '') +
+'</div>' +
+(row.estimatedValue ? '<div class="mt-3 font-label-caps text-[11px] text-primary-fixed">' + formatMoney(row.estimatedValue) + '</div>' : '') +
+'</div>';
+}
+
+function renderCRMBoard(stages) {
+var board = document.getElementById('crm-board');
+board.innerHTML = CRM_COLUMNS.map(function(col) {
+var rows = (stages && stages[col.key]) || [];
+var cards = rows.length ? rows.map(crmCardHtml).join('') : '<div class="text-[12px] text-on-surface-variant p-4 text-center">No deals here</div>';
+return '' +
+'<div class="flex flex-col gap-3">' +
+'<div class="flex items-center justify-between px-1">' +
+'<div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface"><span class="w-2 h-2 rounded-full ' + col.dot + '"></span>' + col.label + '</div>' +
+'<span class="font-label-caps text-[10px] text-on-surface-variant">' + rows.length + '</span>' +
+'</div>' +
+'<div class="flex flex-col gap-3">' + cards + '</div>' +
+'</div>';
+}).join('');
+
+var lost = (stages && stages.lost) || [];
+document.getElementById('crm-lost-count').textContent = lost.length;
+document.getElementById('crm-lost-list').innerHTML = lost.map(function(row) {
+return '<div class="p-3 flex items-center justify-between text-[13px]">' +
+'<span class="text-on-surface">' + escapeHtml(row.name) + (row.company ? ' <span class="text-on-surface-variant">&middot; ' + escapeHtml(row.company) + '</span>' : '') + '</span>' +
+'<span class="font-label-caps text-[10px] text-on-surface-variant">LOST</span>' +
+'</div>';
+}).join('');
+}
+
+function renderCRMStats(stats) {
+if (!stats) return;
+document.getElementById('crm-stat-value').textContent = formatMoney(stats.openPipelineValue);
+document.getElementById('crm-stat-leads').textContent = stats.leadCount;
+document.getElementById('crm-stat-proposal').textContent = stats.proposalCount;
+document.getElementById('crm-stat-active').textContent = stats.activeClientCount;
+}
+
+function showCrmBanner(text) {
+var banner = document.getElementById('crm-banner');
+document.getElementById('crm-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadCRM() {
+renderCRMBoard({});
+fetch(API_BASE + '/crm')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+if (result.status === 'not_connected') {
+showCrmBanner(result.reason || 'Notion Sales CRM is not connected yet.');
+return;
+}
+if (result.status !== 'ok') {
+showCrmBanner('Could not load CRM data: ' + (result.message || 'unknown error'));
+return;
+}
+renderCRMStats(result.data.stats);
+renderCRMBoard(result.data.stages);
+})
+.catch(function(err) {
+showCrmBanner('Could not reach the CRM backend: ' + err.message);
+});
+}
+
+document.getElementById('crm-lost-toggle').addEventListener('click', function() {
+var list = document.getElementById('crm-lost-list');
+list.classList.toggle('hidden');
+});
+
+// ---- Workflows (placeholder demo data — Central Tasks is empty in Notion) ----
+var DEMO_TASKS = [
+{ name: 'Draft Q4 content calendar', client: 'Gray labelled', status: 'Not started', priority: 'High', workArea: 'Strategy & Planning', assignee: 'OM', due: 'Oct 2' },
+{ name: 'Rebrand moodboard v3', client: 'Sevenyears | Rebrand', status: 'In progress', priority: 'Medium', workArea: 'Design & Creative', assignee: 'AL', due: 'Oct 4' },
+{ name: 'Pharmacy launch reels', client: 'Romany Pharamcy', status: 'In progress', priority: 'High', workArea: 'Content Creation', assignee: 'MK', due: 'Oct 5' },
+{ name: 'Renewal check-in call', client: 'Palma', status: 'Not started', priority: 'Medium', workArea: 'Client Management', assignee: 'OM', due: 'Oct 6' },
+{ name: 'Invoice reconciliation', client: 'Internal', status: 'Done', priority: 'Low', workArea: 'Admin', assignee: 'OM', due: 'Sep 30' },
+{ name: 'Cakestay product shoot edit', client: 'Cakestay', status: 'In progress', priority: 'Medium', workArea: 'Design & Creative', assignee: 'AL', due: 'Oct 8' },
+{ name: 'Genetics content strategy deck', client: 'Generation Genetics', status: 'Done', priority: 'High', workArea: 'Strategy & Planning', assignee: 'OM', due: 'Sep 28' }
+];
+
+function taskCardHtml(t) {
+var priorityColor = t.priority === 'High' ? 'bg-red-500/10 text-red-400' : t.priority === 'Medium' ? 'bg-orange-500/10 text-orange-400' : 'bg-surface-container-highest text-on-surface-variant';
+return '' +
+'<div class="glass-card rounded-lg p-4">' +
+'<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(t.name) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(t.client) + ' &middot; ' + escapeHtml(t.workArea) + '</div>' +
+'<div class="flex items-center justify-between">' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] ' + priorityColor + '">' + t.priority.toUpperCase() + '</span>' +
+'<div class="flex items-center gap-2">' +
+'<span class="font-label-caps text-[9px] text-on-surface-variant">' + t.due + '</span>' +
+'<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[9px] font-bold text-on-surface">' + t.assignee + '</div>' +
+'</div></div></div>';
+}
+
+function renderWorkflows() {
+var cols = [
+{ key: 'Not started', label: 'Not Started' },
+{ key: 'In progress', label: 'In Progress' },
+{ key: 'Done', label: 'Done' }
+];
+var board = document.getElementById('workflows-board');
+board.innerHTML = cols.map(function(col) {
+var tasks = DEMO_TASKS.filter(function(t) { return t.status === col.key; });
+return '' +
+'<div class="flex flex-col gap-3">' +
+'<div class="flex items-center justify-between px-1">' +
+'<div class="font-label-caps text-label-caps text-on-surface">' + col.label + '</div>' +
+'<span class="font-label-caps text-[10px] text-on-surface-variant">' + tasks.length + '</span>' +
+'</div>' +
+'<div class="flex flex-col gap-3">' + tasks.map(taskCardHtml).join('') + '</div>' +
+'</div>';
+}).join('');
+}
+
+// ---- Resources (scaffold) ----
+var RESOURCE_GROUPS = [
+{ icon: 'palette', label: 'Brand Assets', desc: 'Logos, fonts, color systems' },
+{ icon: 'description', label: 'Templates', desc: 'Proposals, decks, briefs' },
+{ icon: 'gavel', label: 'Contracts', desc: 'Retainer & scope agreements' },
+{ icon: 'checklist', label: 'SOPs', desc: 'Playbooks & internal process' }
+];
+
+function renderResources() {
+var board = document.getElementById('resources-board');
+board.innerHTML = RESOURCE_GROUPS.map(function(r) {
+return '' +
+'<div class="glass-card rounded-xl p-6 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="w-10 h-10 rounded-lg bg-primary-fixed/10 flex items-center justify-center mb-4"><span class="material-symbols-outlined text-primary-fixed">' + r.icon + '</span></div>' +
+'<div class="font-bold text-on-surface mb-1">' + r.label + '</div>' +
+'<div class="text-[12px] text-on-surface-variant">' + r.desc + '</div>' +
+'</div>';
+}).join('');
+}
+
+// ---- Analytics (scaffold) ----
+function renderAnalytics() {
+var stats = document.getElementById('analytics-stats');
+var items = [
+{ label: 'Deals closed (90d)', value: '--' },
+{ label: 'Avg. deal value', value: '--' },
+{ label: 'Win rate', value: '--' },
+{ label: 'Active retainers', value: '--' }
+];
+stats.innerHTML = items.map(function(i) {
+return '<div class="glass-card rounded-xl p-5"><div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">' + i.label + '</div><div class="font-display-lg text-[28px] text-on-surface">' + i.value + '</div></div>';
+}).join('');
+}
+
+switchView('overview');
 })();
 </script>
 </body></html>
