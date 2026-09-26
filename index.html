@@ -173,13 +173,6 @@ border-radius: 10px;
 <header class="bg-background border-b border-outline-variant flex justify-between items-center h-16 px-6 w-full fixed top-0 z-50">
 <div class="flex items-center gap-8">
 <h1 class="font-display-lg text-[24px] font-black text-on-background tracking-tighter">RibaHaus OS</h1>
-<nav class="hidden md:flex gap-2">
-<a class="bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 font-bold font-label-caps text-label-caps" href="#">Dashboard</a>
-<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Projects</a>
-<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Content</a>
-<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Finance</a>
-<a class="text-on-surface-variant hover:text-on-surface px-4 py-1.5 transition-colors font-label-caps text-label-caps" href="#">Proposals</a>
-</nav>
 </div>
 <div class="flex items-center gap-4">
 <div class="relative hidden sm:block">
@@ -211,19 +204,28 @@ border-radius: 10px;
 </div>
 <div class="flex-1 space-y-1" id="sidebar-nav">
 <a class="sidebar-nav-link flex items-center gap-3 text-primary-fixed border-r-2 border-primary-fixed bg-surface-container-high px-6 py-3 font-label-caps text-label-caps" data-view="overview" href="#">
-<span class="material-symbols-outlined">dashboard</span> Overview
+<span class="material-symbols-outlined">dashboard</span> Home
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="sales" href="#">
+<span class="material-symbols-outlined">trending_up</span> Sales
 </a>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="clients" href="#">
 <span class="material-symbols-outlined">group</span> Clients
 </a>
-<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="resources" href="#">
-<span class="material-symbols-outlined">inventory_2</span> Resources
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="projects" href="#">
+<span class="material-symbols-outlined">account_tree</span> Projects
 </a>
-<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="workflows" href="#">
-<span class="material-symbols-outlined">account_tree</span> Workflows
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="content" href="#">
+<span class="material-symbols-outlined">edit_calendar</span> Content
 </a>
-<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="analytics" href="#">
-<span class="material-symbols-outlined">analytics</span> Analytics
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="finance" href="#">
+<span class="material-symbols-outlined">payments</span> Finance
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="library" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Library
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="ai" href="#">
+<span class="material-symbols-outlined">smart_toy</span> AI &amp; Automations
 </a>
 </div>
 <div class="mt-auto px-6 space-y-1 border-t border-outline-variant pt-6">
@@ -259,38 +261,33 @@ border-radius: 10px;
 <div class="absolute -top-12 -right-12 w-64 h-64 bg-primary-fixed opacity-5 rounded-full blur-3xl group-hover:opacity-10 transition-opacity"></div>
 <div class="absolute bottom-0 right-0 w-32 h-32 bg-primary-fixed opacity-10 rounded-full blur-2xl"></div>
 <div>
-<div class="bg-primary-fixed/10 text-primary-fixed font-label-caps text-[10px] w-fit px-3 py-1 rounded-full mb-6">LIVE STATUS</div>
-<h3 class="font-display-lg text-[40px] leading-tight mb-2 text-on-surface">Active projects: 4</h3>
-<p class="text-[16px] text-on-surface-variant max-w-sm">2 clients · Phase A &amp; B in progress across creative and digital departments.</p>
+<div class="bg-primary-fixed/10 text-primary-fixed font-label-caps text-[10px] w-fit px-3 py-1 rounded-full mb-6">LIVE FROM NOTION</div>
+<h3 class="font-display-lg text-[40px] leading-tight mb-2 text-on-surface" id="home-hero-headline">Loading pipeline…</h3>
+<p class="text-[16px] text-on-surface-variant max-w-sm" id="home-hero-subline">Pulling live numbers from the Sales CRM.</p>
 </div>
 <div class="mt-12 flex gap-4">
-<div class="flex -space-x-3">
-<img alt="Designer portrait" class="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASVDgWN_ofUvp7si3Q0LRxZd2GNlc_ZDZlNrKxXwfyJwXL6EC-dI89RgxUvsX90wHAxKdJOi8fq3A4dZmAFh67SkEi_DWKsAviym4Ae3BRfBnlJ0eoRc8B9KKd7MsbhzNxpi6PX4Y4CrdWFHTUiQUcfIbCllQCG28s3BJjACBvOKQV1B9tiXfTHu11KWvRZRLXiFkIlMHaIJUmbIqHP4tPFx_djcvJw6yadax_LnzoaC2drY6SxOCDK5QfyoV42MHAsqi_OHdscENV"/>
-<img alt="Producer portrait" class="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzHe238rFEwcHB5K706LBdLCpWjGdLncd680erXo7FeKbpnt1g1_hwFXheAaZfjtEXbPN9iE_6K2lKFXgUWJ_J4H-iBXEKLAACz9Q4DbXm8RwmrJYZEC6RcA5h_fMDna_BZp0NvggJEbURnj-lM-B9aqjaGNEeme8rJSiz16Nqq6bkfpqauJkUiC5F0ugGudBDKSEQPrV38UpzFuAxEd7-gxcRF_aqq05_MpmcrY00Z2b9zulZuKZIfLPIDfPuo-PKjnJRi9Ie0833"/>
-<div class="w-10 h-10 rounded-full bg-surface-container-highest border-2 border-background flex items-center justify-center font-label-caps text-label-caps text-on-surface-variant">+3</div>
-</div>
-<button class="flex items-center gap-2 text-primary-fixed font-bold text-label-caps hover:gap-3 transition-all">View all work <span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+<button class="flex items-center gap-2 text-primary-fixed font-bold text-label-caps hover:gap-3 transition-all" data-view-link="sales">View sales pipeline <span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
 </div>
 </div>
 <div class="flex flex-col gap-4">
 <div class="glass-card rounded-xl p-6 flex flex-col justify-between h-1/2">
 <div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-primary-fixed">assignment_turned_in</span>
-<span class="text-on-surface-variant font-label-caps text-[10px]">+2 today</span>
+<span class="material-symbols-outlined text-primary-fixed">group</span>
+<span class="text-on-surface-variant font-label-caps text-[10px]">Live</span>
 </div>
 <div>
-<div class="font-display-lg text-[40px] leading-none mb-1 text-on-surface">7</div>
-<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Deliverables due</div>
+<div class="font-display-lg text-[40px] leading-none mb-1 text-on-surface" id="home-kpi-clients">--</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Active clients</div>
 </div>
 </div>
 <div class="glass-card rounded-xl p-6 flex flex-col justify-between h-1/2">
 <div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-on-surface-variant">send</span>
-<span class="text-on-surface-variant font-label-caps text-[10px]">Pending</span>
+<span class="material-symbols-outlined text-on-surface-variant">percent</span>
+<span class="text-on-surface-variant font-label-caps text-[10px]">Live</span>
 </div>
 <div>
-<div class="font-display-lg text-[40px] leading-none mb-1 text-on-surface">3</div>
-<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Open Proposals</div>
+<div class="font-display-lg text-[40px] leading-none mb-1 text-on-surface" id="home-kpi-winrate">--</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Win rate</div>
 </div>
 </div>
 </div>
@@ -347,121 +344,100 @@ border-radius: 10px;
 <!-- Recent Activity -->
 <div class="glass-card rounded-xl overflow-hidden">
 <div class="p-6 border-b border-outline-variant flex justify-between items-center">
-<h4 class="text-[20px] font-bold text-on-surface">Recent Activity</h4>
-<button class="text-on-surface-variant hover:text-primary-fixed font-label-caps text-label-caps transition-colors">Clear all</button>
+<h4 class="text-[20px] font-bold text-on-surface">Recent CRM activity</h4>
 </div>
-<div class="divide-y divide-outline-variant">
-<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
-<span class="material-symbols-outlined">collections</span>
-</div>
-<div>
-<div class="font-bold text-on-surface">Backpack carousel</div>
-<div class="text-[12px] text-on-surface-variant">Asset set v2.1 uploaded to SY project</div>
-</div>
-</div>
-<div class="flex items-center gap-6">
-<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">APPROVED</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">2 mins ago</span>
-</div>
-</div>
-<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
-<span class="material-symbols-outlined">description</span>
-</div>
-<div>
-<div class="font-bold text-on-surface">Proposal submitted</div>
-<div class="text-[12px] text-on-surface-variant">Phase 2 expansion for BlueRock Client</div>
-</div>
-</div>
-<div class="flex items-center gap-6">
-<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">SUBMITTED</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">1 hour ago</span>
-</div>
-</div>
-<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
-<span class="material-symbols-outlined">palette</span>
-</div>
-<div>
-<div class="font-bold text-on-surface">Moodboard revision</div>
-<div class="text-[12px] text-on-surface-variant">V3 update requested by BM Creative Lead</div>
-</div>
-</div>
-<div class="flex items-center gap-6">
-<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">REVISION</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">3 hours ago</span>
-</div>
-</div>
-<div class="p-4 hover:bg-surface-container-high transition-colors flex items-center justify-between group">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
-<span class="material-symbols-outlined">sync</span>
-</div>
-<div>
-<div class="font-bold text-on-surface">Content calendar sync</div>
-<div class="text-[12px] text-on-surface-variant">Instagram &amp; TikTok schedule updated</div>
-</div>
-</div>
-<div class="flex items-center gap-6">
-<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">SYNCED</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant w-24 text-right">5 hours ago</span>
+<div class="divide-y divide-outline-variant" id="home-recent-activity">
+<div class="p-4 text-[13px] text-on-surface-variant">Loading recent deals…</div>
 </div>
 </div>
 </div>
-</div>
-</div>
-<!-- CRM / Clients View -->
-<div class="view-panel hidden" id="view-clients">
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="crm-stats">
+<!-- Sales View (Sales Stage pipeline) -->
+<div class="view-panel hidden" id="view-sales">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="sales-stats">
 <div class="glass-card rounded-xl p-5">
 <div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Open pipeline value</div>
-<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-value">--</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="sales-stat-value">--</div>
 </div>
 <div class="glass-card rounded-xl p-5">
 <div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Leads</div>
-<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-leads">--</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="sales-stat-leads">--</div>
 </div>
 <div class="glass-card rounded-xl p-5">
-<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">In proposal</div>
-<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-proposal">--</div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">In proposal / negotiation</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="sales-stat-proposal">--</div>
 </div>
 <div class="glass-card rounded-xl p-5">
-<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Active + retainer clients</div>
-<div class="font-display-lg text-[28px] text-on-surface" id="crm-stat-active">--</div>
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Win rate</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="sales-stat-winrate">--</div>
 </div>
 </div>
-<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="crm-banner">
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="sales-banner">
 <span class="material-symbols-outlined text-primary-fixed">info</span>
-<span id="crm-banner-text"></span>
+<span id="sales-banner-text"></span>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4" id="crm-board"></div>
-<button class="mt-6 text-on-surface-variant hover:text-on-surface font-label-caps text-label-caps flex items-center gap-2" id="crm-lost-toggle">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4" id="sales-board"></div>
+<button class="mt-6 text-on-surface-variant hover:text-on-surface font-label-caps text-label-caps flex items-center gap-2" id="sales-lost-toggle">
 <span class="material-symbols-outlined text-[16px]">visibility</span>
-<span>Show lost deals (<span id="crm-lost-count">0</span>)</span>
+<span>Show closed-lost (<span id="sales-lost-count">0</span>)</span>
 </button>
-<div class="hidden mt-4 glass-card rounded-xl divide-y divide-outline-variant" id="crm-lost-list"></div>
+<div class="hidden mt-4 glass-card rounded-xl divide-y divide-outline-variant" id="sales-lost-list"></div>
 </div>
-<!-- Workflows View -->
-<div class="view-panel hidden" id="view-workflows">
-<div class="mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3">
+<!-- Clients View (Client Lifecycle) -->
+<div class="view-panel hidden" id="view-clients">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="clients-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Active clients</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="clients-stat-active">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Renewal due</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="clients-stat-renewal">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">On retainer</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="clients-stat-retainer">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Dormant / offboarded</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="clients-stat-dormant">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="clients-banner">
 <span class="material-symbols-outlined text-primary-fixed">info</span>
-<span>Showing example tasks. Your real Central Tasks database in Notion is currently empty &mdash; once you start adding tasks there, this board will sync automatically.</span>
+<span id="clients-banner-text"></span>
 </div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4" id="clients-board"></div>
+</div>
+<!-- Projects View -->
+<div class="view-panel hidden" id="view-projects">
+<div class="mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="projects-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="projects-banner-text">Loading projects…</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-10" id="projects-board"></div>
+<h4 class="text-[16px] font-bold text-on-surface mb-4">Delivery board <span class="text-on-surface-variant font-normal text-[12px]">(example data — Central Tasks is empty in Notion)</span></h4>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="workflows-board"></div>
 </div>
-<!-- Resources View -->
-<div class="view-panel hidden" id="view-resources">
+<!-- Content View -->
+<div class="view-panel hidden" id="view-content">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Content stays a thin layer over your existing tools for now — no separate content calendar module planned for this phase. This space is reserved for that layer once it's needed.
+</div>
+</div>
+<!-- Finance View -->
+<div class="view-panel hidden" id="view-finance">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Finance is manual-entry in Notion for now (EGP). A dashboard view over that data is coming once there's a Finance data source wired up here.
+</div>
+</div>
+<!-- Library View (formerly Resources) -->
+<div class="view-panel hidden" id="view-library">
 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" id="resources-board"></div>
 </div>
-<!-- Analytics View -->
-<div class="view-panel hidden" id="view-analytics">
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="analytics-stats"></div>
+<!-- AI & Automations View -->
+<div class="view-panel hidden" id="view-ai">
 <div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
-Deeper analytics (revenue trend, client acquisition, deliverable throughput) will wire up once the CRM and Workflows data have a few weeks of real history behind them.
+This is the reserved home for automations and AI-driven workflows across the OS. The assistant in the bottom-right corner is the first piece of this — more is coming as the rest of the system stabilizes.
 </div>
 </div>
 </section>
@@ -469,98 +445,23 @@ Deeper analytics (revenue trend, client acquisition, deliverable throughput) wil
 <aside class="hidden xl:flex w-[320px] shrink-0 border-l border-outline-variant bg-surface-container-lowest flex-col overflow-y-auto custom-scrollbar p-6 gap-8" id="right-panel">
 <div>
 <div class="flex justify-between items-center mb-6">
-<h5 class="text-[18px] font-bold text-on-surface">Active Projects</h5>
+<h5 class="text-[18px] font-bold text-on-surface">Projects</h5>
 <div class="flex gap-2">
-<button class="p-1.5 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-all"><span class="material-symbols-outlined text-[18px]">add</span></button>
-<button class="p-1.5 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-all"><span class="material-symbols-outlined text-[18px]">north_east</span></button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-all" data-view-link="projects"><span class="material-symbols-outlined text-[18px]">north_east</span></button>
 </div>
 </div>
-<div class="space-y-4">
-<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer group">
-<div class="flex justify-between mb-3">
-<span class="font-label-caps text-[11px] text-primary-fixed">SY-2026</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant">84%</span>
-</div>
-<div class="font-bold text-on-surface mb-3 group-hover:text-primary-fixed transition-colors">Brand Campaign</div>
-<div class="w-full bg-surface-container-highest h-1 rounded-full mb-3">
-<div class="bg-primary-fixed h-1 rounded-full" style="width: 84%;"></div>
-</div>
-<div class="flex justify-between items-center text-[10px] font-label-caps text-on-surface-variant">
-<span>12 Oct · 2026</span>
-<div class="flex -space-x-2">
-<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg0Ckq9FXtrXTbBSLlzpwHJH_JMlJczeP7bKYE1JBElqWfWfh2Y4p6VSI7wFRrGB870AS6tIcsETnt3-Xpjs-GL9xq_vgp_zBtiMPg5usacNCN02ILIZYaw83x9eWHUMAyNULmckDKdeu8h4Mfl75ZYxLJlXcnmB7wQcMPDHbLZuTv-vn3wifC0iGFTWCzV4VjVVwyQuThgfhKii4_jd7QihH5lP2Q6cFkGruyPPcClJFAVOD9ej0bldAbbCkJZhskIkHoUFponUb_"/>
-<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcXO_0s7rZmvnpM9jUyT09tvAwMONPyFouKFJtSKmjKJ2C9YT58DbktbnLc8KM0Z5jy6CqEufICI6nj5_DWLkotNOzUWjlagG-N6qbAumYgJ_Ssiy15dFpcDT4Bc7HZ9P8567UGEH6Gnk3IIrT1Up5oISdijvuFigXdlpG1mXZ05SvphVFbq1c79hZBB11YYIYyVFT5KGsYldeUdSAWhTY9REx8tbayHOfI70fS6FugJBllSGrY4NWzlZcG7MtvlTqlDJZ7FDXNSQS"/>
-</div>
-</div>
-</div>
-<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer group">
-<div class="flex justify-between mb-3">
-<span class="font-label-caps text-[11px] text-primary-fixed">BM-ID</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant">32%</span>
-</div>
-<div class="font-bold text-on-surface mb-3 group-hover:text-primary-fixed transition-colors">Brand Identity System</div>
-<div class="w-full bg-surface-container-highest h-1 rounded-full mb-3">
-<div class="bg-primary-fixed h-1 rounded-full" style="width: 32%;"></div>
-</div>
-<div class="flex justify-between items-center text-[10px] font-label-caps text-on-surface-variant">
-<span>28 Oct · 2026</span>
-<div class="flex -space-x-2">
-<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHwyUI_5k8ZzglPUKf7ejvXEJ9SihA8O_WJn0nvhmUtd0s18RXhBiXObL2-OlX7lngNun2lei_NmvQDZb6UY8oYDW3rKR9-m_k3jBOhR3d0aEGyPLlqZTpxr5qTfQZLNiGSOkml-D-vozovgGiaWU2-NVCz0VBtzuz9mFB8itrnAjLZ2cPiTM-CdZZ1H0_qpgLqRlsfk5kCxZDTZx5Mfr30kFeDPMls1FEUqMnuWS2m6aQRTTudkyYztYxB4zVnZArDhKgkJC4yRC0"/>
-</div>
-</div>
-</div>
-<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer group">
-<div class="flex justify-between mb-3">
-<span class="font-label-caps text-[11px] text-primary-fixed">SY-CC</span>
-<span class="font-label-caps text-[11px] text-on-surface-variant">61%</span>
-</div>
-<div class="font-bold text-on-surface mb-3 group-hover:text-primary-fixed transition-colors">Content Calendar Q3</div>
-<div class="w-full bg-surface-container-highest h-1 rounded-full mb-3">
-<div class="bg-primary-fixed h-1 rounded-full" style="width: 61%;"></div>
-</div>
-<div class="flex justify-between items-center text-[10px] font-label-caps text-on-surface-variant">
-<span>04 Nov · 2026</span>
-<div class="flex -space-x-2">
-<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGCjio7Tay7P6d_PThB6vzxw3lWkXhs2vGiisfffiEt87eoSxi8Cq9qWqjvuqUPVNVLlQGhc1rySM4p9Ui_sM0O43m1XUwxYsu6rMvkbxUx_jw8eD85jHiDz4aglrqa2cVlQxCSZ2msy70tuQiiQ3vEBU9QjK9qR4Ktt_JWIqavP69xZ5Cusc_FZRQMQhVxhKnaINpTq_ZrevC2sRztbjwm0lRTfaMurZnHMeK-vLDZYd9He-SEfBMBLfK8_pIAsD_S9MW-I83YJHX"/>
-<img alt="Avatar" class="w-5 h-5 rounded-full border border-surface-container-lowest object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgUerGcBZ8vpf7_Th-kZ9Ht7URz2O8dOQhVurKhbTENNmKNIhhLWXvSmXp0ZabWdThFA8R-XCVrZZoN5SKXuizpmyWIURhr2xF4qpj2ktKHQVTc4F_p8Id2iMJF-4bInUt7ymt4IbtgAqPdjiYLKxwH-da6hasuLQIXMgo-ZIRbZfsoh2vMP8wHMN9J1TL91v0qr-F9lR_IITNRDLxh3zyy8RhmCXMHwkbYiTN2M9NZLn_apyhgjUZugzkcRyIlBKDQiIL3gz0ND84"/>
-</div>
-</div>
-</div>
+<div class="space-y-4" id="home-projects-list">
+<div class="text-[12px] text-on-surface-variant">Loading…</div>
 </div>
 </div>
 <div>
 <div class="flex justify-between items-center mb-6">
 <h5 class="text-[18px] font-bold text-on-surface">Upcoming</h5>
-<button class="text-on-surface-variant hover:text-primary-fixed font-label-caps text-[11px] transition-colors">See all →</button>
+<button class="text-on-surface-variant hover:text-primary-fixed font-label-caps text-[11px] transition-colors" data-view-link="projects">See all →</button>
 </div>
-<div class="space-y-1">
-<div class="flex items-center justify-between p-3 rounded hover:bg-surface-container-high transition-all cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">JD</div>
-<span class="text-[13px] text-on-surface group-hover:text-primary-fixed transition-colors">Carousel slide</span>
+<div class="space-y-1" id="home-upcoming-list">
+<div class="p-3 text-[12px] text-on-surface-variant">Central Tasks in Notion is empty — nothing scheduled yet.</div>
 </div>
-<span class="font-label-caps text-[9px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">Oct 25</span>
-</div>
-<div class="flex items-center justify-between p-3 rounded hover:bg-surface-container-high transition-all cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">MK</div>
-<span class="text-[13px] text-on-surface group-hover:text-primary-fixed transition-colors">Moodboard</span>
-</div>
-<span class="font-label-caps text-[9px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">Oct 26</span>
-</div>
-<div class="flex items-center justify-between p-3 rounded hover:bg-surface-container-high transition-all cursor-pointer group">
-<div class="flex items-center gap-3">
-<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">AL</div>
-<span class="text-[13px] text-on-surface group-hover:text-primary-fixed transition-colors">Strategy deck</span>
-</div>
-<span class="font-label-caps text-[9px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">Oct 27</span>
-</div>
-</div>
-</div>
-<div class="mt-auto bg-primary-fixed/5 rounded-xl p-6 border border-primary-fixed/20">
-<h6 class="text-[16px] font-bold text-primary-fixed mb-2">Upgrade Storage</h6>
-<p class="text-[12px] text-on-surface-variant mb-4">You've used 82% of your agency workspace storage.</p>
-<button class="w-full bg-primary-fixed text-white font-bold py-2 rounded text-label-caps">View Plans</button>
 </div>
 </aside>
 </main>
@@ -742,7 +643,7 @@ sending = false;
 });
 })();
 
-// View switching + Clients/Workflows/Resources/Analytics pages (RibaHaus OS UI/CRM pass)
+// View switching + Sales/Clients/Projects/Library pages (RibaHaus OS v2 IA pass)
 (function() {
 var API_BASE = 'https://ribahaus-os.vercel.app/api';
 
@@ -756,16 +657,19 @@ return String(str)
 }
 
 function formatMoney(n) {
-if (n === null || n === undefined || isNaN(n)) return '$0';
-return '$' + Math.round(n).toLocaleString('en-US');
+if (n === null || n === undefined || isNaN(n)) return 'EGP 0';
+return 'EGP ' + Math.round(n).toLocaleString('en-US');
 }
 
 var VIEWS = {
-overview: { eyebrow: 'Agency OS v1.0', title: 'My Dashboard', primary: 'New Project', secondary: 'Export Report' },
-clients: { eyebrow: 'Sales CRM', title: 'Clients', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadCRM },
-workflows: { eyebrow: 'Delegation Hub', title: 'Workflows', primary: 'New Task', secondary: 'Filter', onShow: renderWorkflows },
-resources: { eyebrow: 'Agency Library', title: 'Resources', primary: 'Upload', secondary: 'New Folder', onShow: renderResources },
-analytics: { eyebrow: 'Performance', title: 'Analytics', primary: 'Refresh', secondary: 'Export Report', onShow: renderAnalytics }
+overview: { eyebrow: 'Agency OS v2.0', title: 'Home', primary: 'New Project', secondary: 'Export Report', onShow: loadHome },
+sales: { eyebrow: 'Sales Pipeline', title: 'Sales', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadSales },
+clients: { eyebrow: 'Client Lifecycle', title: 'Clients', primary: 'Add Client', secondary: 'Sync Notion', onShow: loadClients },
+projects: { eyebrow: 'Delivery', title: 'Projects', primary: 'New Project', secondary: 'Filter', onShow: loadProjects },
+content: { eyebrow: 'Content', title: 'Content', primary: 'New Post', secondary: 'Filter' },
+finance: { eyebrow: 'Finance', title: 'Finance', primary: 'New Entry', secondary: 'Export' },
+library: { eyebrow: 'Agency Library', title: 'Library', primary: 'Upload', secondary: 'New Folder', onShow: renderResources },
+ai: { eyebrow: 'AI & Automations', title: 'AI & Automations', primary: 'New Automation', secondary: 'Settings' }
 };
 
 function switchView(name) {
@@ -805,15 +709,88 @@ switchView(a.getAttribute('data-view'));
 });
 });
 
-// ---- Clients / CRM ----
-var CRM_COLUMNS = [
+document.querySelectorAll('[data-view-link]').forEach(function(a) {
+a.addEventListener('click', function(e) {
+e.preventDefault();
+switchView(a.getAttribute('data-view-link'));
+});
+});
+
+// ---- Home ----
+function timeAgo(iso) {
+if (!iso) return '';
+var diffMs = Date.now() - new Date(iso).getTime();
+var mins = Math.round(diffMs / 60000);
+if (mins < 60) return mins + 'm ago';
+var hours = Math.round(mins / 60);
+if (hours < 24) return hours + 'h ago';
+return Math.round(hours / 24) + 'd ago';
+}
+
+function loadHome() {
+fetch(API_BASE + '/crm')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+if (result.status !== 'ok') {
+document.getElementById('home-hero-headline').textContent = 'Sales CRM not connected';
+document.getElementById('home-hero-subline').textContent = result.reason || result.message || 'Check the Notion connection.';
+return;
+}
+var stats = result.data.stats;
+var openCount = stats.leadCount + stats.qualifiedCount + stats.proposalCount + stats.negotiationCount;
+document.getElementById('home-hero-headline').textContent = openCount + ' deals in pipeline';
+document.getElementById('home-hero-subline').textContent = formatMoney(stats.openPipelineValue) + ' open pipeline value across ' + stats.leadCount + ' leads and ' + (stats.proposalCount + stats.negotiationCount) + ' in proposal/negotiation.';
+document.getElementById('home-kpi-clients').textContent = stats.activeClientCount;
+document.getElementById('home-kpi-winrate').textContent = stats.winRate === null ? '--' : stats.winRate + '%';
+
+var allRows = [].concat(result.data.salesPipeline.lead, result.data.salesPipeline.qualified, result.data.salesPipeline.proposal, result.data.salesPipeline.negotiation, result.data.salesPipeline.closed_won, result.data.salesPipeline.closed_lost);
+allRows.sort(function(a, b) { return new Date(b.added) - new Date(a.added); });
+var recent = allRows.slice(0, 5);
+document.getElementById('home-recent-activity').innerHTML = recent.length ? recent.map(function(row) {
+return '<div class="p-4 flex items-center justify-between">' +
+'<div><div class="font-bold text-on-surface">' + escapeHtml(row.name) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant">' + escapeHtml(row.company || '') + '</div></div>' +
+'<div class="flex items-center gap-4">' +
+'<span class="px-3 py-1 bg-primary-fixed/10 text-primary-fixed rounded-full font-label-caps text-[10px]">' + escapeHtml((row.status || '').toUpperCase()) + '</span>' +
+'<span class="font-label-caps text-[11px] text-on-surface-variant w-16 text-right">' + timeAgo(row.added) + '</span>' +
+'</div></div>';
+}).join('') : '<div class="p-4 text-[13px] text-on-surface-variant">No CRM activity yet.</div>';
+})
+.catch(function(err) {
+document.getElementById('home-hero-headline').textContent = 'Could not reach backend';
+document.getElementById('home-hero-subline').textContent = err.message;
+});
+
+fetch(API_BASE + '/projects')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var list = document.getElementById('home-projects-list');
+if (result.status !== 'ok') {
+list.innerHTML = '<div class="text-[12px] text-on-surface-variant">' + escapeHtml(result.reason || 'Projects not connected yet.') + '</div>';
+return;
+}
+var projects = result.data.projects.slice(0, 3);
+list.innerHTML = projects.length ? projects.map(function(p) {
+return '<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="font-bold text-on-surface mb-1">' + escapeHtml(p.name) + '</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(p.status || 'No status') + (p.dueDate ? ' &middot; due ' + escapeHtml(p.dueDate) : '') + '</div>' +
+'</div>';
+}).join('') : '<div class="text-[12px] text-on-surface-variant">No projects yet — add one in the new Projects database in Notion.</div>';
+})
+.catch(function() {
+document.getElementById('home-projects-list').innerHTML = '<div class="text-[12px] text-on-surface-variant">Could not reach the Projects backend.</div>';
+});
+}
+
+// ---- Sales (Sales Stage pipeline) ----
+var SALES_COLUMNS = [
 { key: 'lead', label: 'Lead', dot: 'bg-pink-400' },
+{ key: 'qualified', label: 'Qualified', dot: 'bg-purple-400' },
 { key: 'proposal', label: 'Proposal', dot: 'bg-blue-400' },
-{ key: 'active_client', label: 'Active Client', dot: 'bg-green-400' },
-{ key: 'retainer', label: 'Retainer / Renewal', dot: 'bg-amber-400' }
+{ key: 'negotiation', label: 'Negotiation', dot: 'bg-amber-400' }
 ];
 
-function crmCardHtml(row) {
+function dealCardHtml(row) {
 var priorityColor = row.priority === 'High' ? 'bg-red-500/10 text-red-400' : row.priority === 'Medium' ? 'bg-orange-500/10 text-orange-400' : 'bg-surface-container-highest text-on-surface-variant';
 return '' +
 '<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
@@ -827,11 +804,11 @@ return '' +
 '</div>';
 }
 
-function renderCRMBoard(stages) {
-var board = document.getElementById('crm-board');
-board.innerHTML = CRM_COLUMNS.map(function(col) {
-var rows = (stages && stages[col.key]) || [];
-var cards = rows.length ? rows.map(crmCardHtml).join('') : '<div class="text-[12px] text-on-surface-variant p-4 text-center">No deals here</div>';
+function renderSalesBoard(pipeline) {
+var board = document.getElementById('sales-board');
+board.innerHTML = SALES_COLUMNS.map(function(col) {
+var rows = (pipeline && pipeline[col.key]) || [];
+var cards = rows.length ? rows.map(dealCardHtml).join('') : '<div class="text-[12px] text-on-surface-variant p-4 text-center">No deals here</div>';
 return '' +
 '<div class="flex flex-col gap-3">' +
 '<div class="flex items-center justify-between px-1">' +
@@ -842,9 +819,9 @@ return '' +
 '</div>';
 }).join('');
 
-var lost = (stages && stages.lost) || [];
-document.getElementById('crm-lost-count').textContent = lost.length;
-document.getElementById('crm-lost-list').innerHTML = lost.map(function(row) {
+var lost = (pipeline && pipeline.closed_lost) || [];
+document.getElementById('sales-lost-count').textContent = lost.length;
+document.getElementById('sales-lost-list').innerHTML = lost.map(function(row) {
 return '<div class="p-3 flex items-center justify-between text-[13px]">' +
 '<span class="text-on-surface">' + escapeHtml(row.name) + (row.company ? ' <span class="text-on-surface-variant">&middot; ' + escapeHtml(row.company) + '</span>' : '') + '</span>' +
 '<span class="font-label-caps text-[10px] text-on-surface-variant">LOST</span>' +
@@ -852,47 +829,163 @@ return '<div class="p-3 flex items-center justify-between text-[13px]">' +
 }).join('');
 }
 
-function renderCRMStats(stats) {
+function renderSalesStats(stats) {
 if (!stats) return;
-document.getElementById('crm-stat-value').textContent = formatMoney(stats.openPipelineValue);
-document.getElementById('crm-stat-leads').textContent = stats.leadCount;
-document.getElementById('crm-stat-proposal').textContent = stats.proposalCount;
-document.getElementById('crm-stat-active').textContent = stats.activeClientCount;
+document.getElementById('sales-stat-value').textContent = formatMoney(stats.openPipelineValue);
+document.getElementById('sales-stat-leads').textContent = stats.leadCount;
+document.getElementById('sales-stat-proposal').textContent = stats.proposalCount + stats.negotiationCount;
+document.getElementById('sales-stat-winrate').textContent = stats.winRate === null ? '--' : stats.winRate + '%';
 }
 
-function showCrmBanner(text) {
-var banner = document.getElementById('crm-banner');
-document.getElementById('crm-banner-text').textContent = text;
+function showSalesBanner(text) {
+var banner = document.getElementById('sales-banner');
+document.getElementById('sales-banner-text').textContent = text;
 banner.classList.remove('hidden');
 }
 
-function loadCRM() {
-renderCRMBoard({});
+function loadSales() {
+renderSalesBoard({});
 fetch(API_BASE + '/crm')
 .then(function(res) { return res.json(); })
 .then(function(result) {
 if (result.status === 'not_connected') {
-showCrmBanner(result.reason || 'Notion Sales CRM is not connected yet.');
+showSalesBanner(result.reason || 'Notion Sales CRM is not connected yet.');
 return;
 }
 if (result.status !== 'ok') {
-showCrmBanner('Could not load CRM data: ' + (result.message || 'unknown error'));
+showSalesBanner('Could not load CRM data: ' + (result.message || 'unknown error'));
 return;
 }
-renderCRMStats(result.data.stats);
-renderCRMBoard(result.data.stages);
+renderSalesStats(result.data.stats);
+renderSalesBoard(result.data.salesPipeline);
 })
 .catch(function(err) {
-showCrmBanner('Could not reach the CRM backend: ' + err.message);
+showSalesBanner('Could not reach the CRM backend: ' + err.message);
 });
 }
 
-document.getElementById('crm-lost-toggle').addEventListener('click', function() {
-var list = document.getElementById('crm-lost-list');
+document.getElementById('sales-lost-toggle').addEventListener('click', function() {
+var list = document.getElementById('sales-lost-list');
 list.classList.toggle('hidden');
 });
 
-// ---- Workflows (placeholder demo data — Central Tasks is empty in Notion) ----
+// ---- Clients (Client Lifecycle) ----
+var CLIENT_COLUMNS = [
+{ key: 'onboarding', label: 'Onboarding', dot: 'bg-pink-400' },
+{ key: 'active', label: 'Active', dot: 'bg-green-400' },
+{ key: 'renewal_due', label: 'Renewal Due', dot: 'bg-amber-400' },
+{ key: 'dormant', label: 'Dormant', dot: 'bg-gray-400' },
+{ key: 'offboarded', label: 'Offboarded', dot: 'bg-red-400' }
+];
+
+function clientCardHtml(row) {
+return '' +
+'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(row.name) + '</div>' +
+(row.company ? '<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(row.company) + '</div>' : '<div class="mb-3"></div>') +
+(row.engagementType ? '<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-caps text-[9px]">' + escapeHtml(row.engagementType).toUpperCase() + '</span>' : '<span class="text-[10px] text-on-surface-variant">Engagement type not set</span>') +
+'</div>';
+}
+
+function renderClientsBoard(clients) {
+var board = document.getElementById('clients-board');
+board.innerHTML = CLIENT_COLUMNS.map(function(col) {
+var rows = (clients && clients[col.key]) || [];
+var cards = rows.length ? rows.map(clientCardHtml).join('') : '<div class="text-[12px] text-on-surface-variant p-4 text-center">None</div>';
+return '' +
+'<div class="flex flex-col gap-3">' +
+'<div class="flex items-center justify-between px-1">' +
+'<div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface"><span class="w-2 h-2 rounded-full ' + col.dot + '"></span>' + col.label + '</div>' +
+'<span class="font-label-caps text-[10px] text-on-surface-variant">' + rows.length + '</span>' +
+'</div>' +
+'<div class="flex flex-col gap-3">' + cards + '</div>' +
+'</div>';
+}).join('');
+}
+
+function renderClientsStats(stats) {
+if (!stats) return;
+document.getElementById('clients-stat-active').textContent = stats.activeClientCount;
+document.getElementById('clients-stat-renewal').textContent = stats.renewalDueCount;
+document.getElementById('clients-stat-retainer').textContent = stats.retainerCount;
+}
+
+function showClientsBanner(text) {
+var banner = document.getElementById('clients-banner');
+document.getElementById('clients-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadClients() {
+renderClientsBoard({});
+fetch(API_BASE + '/crm')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+if (result.status === 'not_connected') {
+showClientsBanner(result.reason || 'Notion Sales CRM is not connected yet.');
+return;
+}
+if (result.status !== 'ok') {
+showClientsBanner('Could not load client data: ' + (result.message || 'unknown error'));
+return;
+}
+renderClientsStats(result.data.stats);
+renderClientsBoard(result.data.clients);
+var dormantOffboarded = (result.data.clients.dormant || []).length + (result.data.clients.offboarded || []).length;
+document.getElementById('clients-stat-dormant').textContent = dormantOffboarded;
+})
+.catch(function(err) {
+showClientsBanner('Could not reach the CRM backend: ' + err.message);
+});
+}
+
+// ---- Projects ----
+function projectCardHtml(p) {
+var statusColor = p.status === 'Done' ? 'bg-green-500/10 text-green-400' : p.status === 'On Hold' ? 'bg-red-500/10 text-red-400' : 'bg-surface-container-highest text-on-surface-variant';
+return '' +
+'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="font-bold text-on-surface text-[14px] mb-2">' + escapeHtml(p.name) + '</div>' +
+'<div class="flex items-center justify-between">' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] ' + statusColor + '">' + escapeHtml((p.status || 'NO STATUS').toUpperCase()) + '</span>' +
+(p.dueDate ? '<span class="font-label-caps text-[10px] text-on-surface-variant">Due ' + escapeHtml(p.dueDate) + '</span>' : '') +
+'</div></div>';
+}
+
+function loadProjects() {
+fetch(API_BASE + '/projects')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var banner = document.getElementById('projects-banner');
+var bannerText = document.getElementById('projects-banner-text');
+var board = document.getElementById('projects-board');
+if (result.status === 'not_connected') {
+bannerText.textContent = result.reason || 'Projects database is not connected yet.';
+banner.classList.remove('hidden');
+board.innerHTML = '';
+return;
+}
+if (result.status !== 'ok') {
+bannerText.textContent = 'Could not load projects: ' + (result.message || 'unknown error');
+banner.classList.remove('hidden');
+board.innerHTML = '';
+return;
+}
+if (!result.data.projects.length) {
+bannerText.textContent = 'The new Projects database is set up and connected — it just has no rows yet. Add projects in Notion and they will show up here.';
+banner.classList.remove('hidden');
+} else {
+banner.classList.add('hidden');
+}
+board.innerHTML = result.data.projects.map(projectCardHtml).join('');
+})
+.catch(function(err) {
+document.getElementById('projects-banner-text').textContent = 'Could not reach the Projects backend: ' + err.message;
+document.getElementById('projects-banner').classList.remove('hidden');
+});
+renderWorkflows();
+}
+
+// ---- Workflows / Delivery board (placeholder demo data — Central Tasks is empty in Notion) ----
 var DEMO_TASKS = [
 { name: 'Draft Q4 content calendar', client: 'Gray labelled', status: 'Not started', priority: 'High', workArea: 'Strategy & Planning', assignee: 'OM', due: 'Oct 2' },
 { name: 'Rebrand moodboard v3', client: 'Sevenyears | Rebrand', status: 'In progress', priority: 'Medium', workArea: 'Design & Creative', assignee: 'AL', due: 'Oct 4' },
@@ -954,20 +1047,6 @@ return '' +
 '<div class="font-bold text-on-surface mb-1">' + r.label + '</div>' +
 '<div class="text-[12px] text-on-surface-variant">' + r.desc + '</div>' +
 '</div>';
-}).join('');
-}
-
-// ---- Analytics (scaffold) ----
-function renderAnalytics() {
-var stats = document.getElementById('analytics-stats');
-var items = [
-{ label: 'Deals closed (90d)', value: '--' },
-{ label: 'Avg. deal value', value: '--' },
-{ label: 'Win rate', value: '--' },
-{ label: 'Active retainers', value: '--' }
-];
-stats.innerHTML = items.map(function(i) {
-return '<div class="glass-card rounded-xl p-5"><div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">' + i.label + '</div><div class="font-display-lg text-[28px] text-on-surface">' + i.value + '</div></div>';
 }).join('');
 }
 
