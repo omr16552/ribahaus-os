@@ -433,21 +433,73 @@ Ad spend tracking is being built on a new database layer (separate from Notion) 
 </div>
 <!-- Invoices View -->
 <div class="view-panel hidden" id="view-invoices">
-<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
-Invoices will be tracked here once the new database is connected — line items and totals live in the database, and the actual invoice file for each one is stored in Google Drive rather than duplicated here.
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="invoices-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Total invoices</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="invoices-stat-total">--</div>
 </div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Outstanding</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="invoices-stat-outstanding">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Paid</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="invoices-stat-paid">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Overdue</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="invoices-stat-overdue">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="invoices-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="invoices-banner-text"></span>
+</div>
+<div class="glass-card rounded-xl divide-y divide-outline-variant" id="invoices-list"></div>
 </div>
 <!-- Expenses View -->
 <div class="view-panel hidden" id="view-expenses">
-<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
-Expense tracking is reserved for the same Money data layer as Invoices and Subscriptions. Nothing is wired up yet.
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8" id="expenses-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Total entries</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="expenses-stat-total">--</div>
 </div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Total spent</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="expenses-stat-amount">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Top category</div>
+<div class="font-display-lg text-[20px] text-on-surface" id="expenses-stat-category">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="expenses-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="expenses-banner-text"></span>
+</div>
+<div class="glass-card rounded-xl divide-y divide-outline-variant" id="expenses-list"></div>
 </div>
 <!-- Subscriptions View -->
 <div class="view-panel hidden" id="view-subscriptions">
-<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
-Recurring subscriptions and software spend will live here once the new database is connected.
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8" id="subscriptions-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Active</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="subscriptions-stat-active">--</div>
 </div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Total tracked</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="subscriptions-stat-total">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Monthly cost</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="subscriptions-stat-monthly">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="subscriptions-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="subscriptions-banner-text"></span>
+</div>
+<div class="glass-card rounded-xl divide-y divide-outline-variant" id="subscriptions-list"></div>
 </div>
 <!-- Projections View -->
 <div class="view-panel hidden" id="view-projections">
@@ -732,9 +784,9 @@ sales: { eyebrow: 'Clients & Work', title: 'Sales', primary: 'Add Lead', seconda
 clients: { eyebrow: 'Clients & Work', title: 'Clients', primary: 'Add Client', secondary: 'Sync Notion', onShow: loadClients },
 projects: { eyebrow: 'Clients & Work', title: 'Projects', primary: 'New Project', secondary: 'Filter', onShow: loadProjects },
 adspend: { eyebrow: 'Clients & Work', title: 'Ad Spend', primary: 'New Entry', secondary: 'Export' },
-invoices: { eyebrow: 'Money', title: 'Invoices', primary: 'New Invoice', secondary: 'Export' },
-expenses: { eyebrow: 'Money', title: 'Expenses', primary: 'New Expense', secondary: 'Export' },
-subscriptions: { eyebrow: 'Money', title: 'Subscriptions', primary: 'New Subscription', secondary: 'Export' },
+invoices: { eyebrow: 'Money', title: 'Invoices', primary: 'New Invoice', secondary: 'Export', onShow: loadInvoices },
+expenses: { eyebrow: 'Money', title: 'Expenses', primary: 'New Expense', secondary: 'Export', onShow: loadExpenses },
+subscriptions: { eyebrow: 'Money', title: 'Subscriptions', primary: 'New Subscription', secondary: 'Export', onShow: loadSubscriptions },
 projections: { eyebrow: 'Plan', title: 'Projections', primary: 'New Scenario', secondary: 'Export' },
 reports: { eyebrow: 'Plan', title: 'Reports', primary: 'New Report', secondary: 'Export' },
 team: { eyebrow: 'Plan', title: 'Team', primary: 'Add Member', secondary: 'Settings' },
@@ -1055,6 +1107,164 @@ document.getElementById('projects-banner-text').textContent = 'Could not reach t
 document.getElementById('projects-banner').classList.remove('hidden');
 });
 renderWorkflows();
+}
+
+// ---- Invoices ----
+function invoiceRowHtml(row) {
+var statusColor = row.status === 'paid' ? 'bg-green-500/10 text-green-400' : row.status === 'overdue' ? 'bg-red-500/10 text-red-400' : row.status === 'sent' ? 'bg-blue-500/10 text-blue-400' : 'bg-surface-container-highest text-on-surface-variant';
+return '' +
+'<div class="p-4 flex items-center justify-between gap-4">' +
+'<div class="flex-1 min-w-0">' +
+'<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.invoiceNumber) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.clientName) + '</div>' +
+'</div>' +
+'<div class="text-right shrink-0">' +
+'<div class="font-bold text-on-surface text-[14px]">' + formatMoney(row.amount) + '</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(row.issueDate || '') + (row.dueDate ? ' &middot; due ' + escapeHtml(row.dueDate) : '') + '</div>' +
+'</div>' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] shrink-0 ' + statusColor + '">' + escapeHtml((row.status || '').toUpperCase()) + '</span>' +
+'</div>';
+}
+
+function renderInvoicesStats(stats) {
+if (!stats) return;
+document.getElementById('invoices-stat-total').textContent = stats.totalCount;
+document.getElementById('invoices-stat-outstanding').textContent = formatMoney(stats.outstandingAmount);
+document.getElementById('invoices-stat-paid').textContent = formatMoney(stats.paidAmount);
+document.getElementById('invoices-stat-overdue').textContent = stats.overdueCount;
+}
+
+function showInvoicesBanner(text) {
+var banner = document.getElementById('invoices-banner');
+document.getElementById('invoices-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadInvoices() {
+fetch(API_BASE + '/invoices')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var list = document.getElementById('invoices-list');
+if (result.status === 'not_connected') {
+showInvoicesBanner(result.reason || 'Invoices database is not connected yet.');
+list.innerHTML = '';
+return;
+}
+if (result.status !== 'ok') {
+showInvoicesBanner('Could not load invoices: ' + (result.message || 'unknown error'));
+list.innerHTML = '';
+return;
+}
+renderInvoicesStats(result.data.stats);
+list.innerHTML = result.data.invoices.length ? result.data.invoices.map(invoiceRowHtml).join('') : '<div class="p-6 text-[13px] text-on-surface-variant text-center">No invoices yet. Use "New Invoice" to add the first one.</div>';
+})
+.catch(function(err) {
+showInvoicesBanner('Could not reach the Invoices backend: ' + err.message);
+});
+}
+
+// ---- Expenses ----
+function expenseRowHtml(row) {
+return '' +
+'<div class="p-4 flex items-center justify-between gap-4">' +
+'<div class="flex-1 min-w-0">' +
+'<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.vendor) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.expenseDate || '') + '</div>' +
+'</div>' +
+'<div class="text-right font-bold text-on-surface text-[14px] shrink-0">' + formatMoney(row.amount) + '</div>' +
+'<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-caps text-[9px] shrink-0">' + escapeHtml((row.category || '').toUpperCase()) + '</span>' +
+'</div>';
+}
+
+function renderExpensesStats(stats) {
+if (!stats) return;
+document.getElementById('expenses-stat-total').textContent = stats.totalCount;
+document.getElementById('expenses-stat-amount').textContent = formatMoney(stats.totalAmount);
+var categories = Object.keys(stats.byCategory || {});
+var top = categories.sort(function(a, b) { return stats.byCategory[b] - stats.byCategory[a]; })[0];
+document.getElementById('expenses-stat-category').textContent = top || '--';
+}
+
+function showExpensesBanner(text) {
+var banner = document.getElementById('expenses-banner');
+document.getElementById('expenses-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadExpenses() {
+fetch(API_BASE + '/expenses')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var list = document.getElementById('expenses-list');
+if (result.status === 'not_connected') {
+showExpensesBanner(result.reason || 'Expenses database is not connected yet.');
+list.innerHTML = '';
+return;
+}
+if (result.status !== 'ok') {
+showExpensesBanner('Could not load expenses: ' + (result.message || 'unknown error'));
+list.innerHTML = '';
+return;
+}
+renderExpensesStats(result.data.stats);
+list.innerHTML = result.data.expenses.length ? result.data.expenses.map(expenseRowHtml).join('') : '<div class="p-6 text-[13px] text-on-surface-variant text-center">No expenses logged yet. Use "New Expense" to add the first one.</div>';
+})
+.catch(function(err) {
+showExpensesBanner('Could not reach the Expenses backend: ' + err.message);
+});
+}
+
+// ---- Subscriptions ----
+function subscriptionRowHtml(row) {
+var statusColor = row.status === 'active' ? 'bg-green-500/10 text-green-400' : row.status === 'paused' ? 'bg-amber-500/10 text-amber-400' : 'bg-surface-container-highest text-on-surface-variant';
+return '' +
+'<div class="p-4 flex items-center justify-between gap-4">' +
+'<div class="flex-1 min-w-0">' +
+'<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.name) + '</div>' +
+(row.vendor ? '<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.vendor) + '</div>' : '') +
+'</div>' +
+'<div class="text-right shrink-0">' +
+'<div class="font-bold text-on-surface text-[14px]">' + formatMoney(row.amount) + '</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(row.billingCycle || '') + (row.nextRenewalDate ? ' &middot; renews ' + escapeHtml(row.nextRenewalDate) : '') + '</div>' +
+'</div>' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] shrink-0 ' + statusColor + '">' + escapeHtml((row.status || '').toUpperCase()) + '</span>' +
+'</div>';
+}
+
+function renderSubscriptionsStats(stats) {
+if (!stats) return;
+document.getElementById('subscriptions-stat-active').textContent = stats.activeCount;
+document.getElementById('subscriptions-stat-total').textContent = stats.totalCount;
+document.getElementById('subscriptions-stat-monthly').textContent = formatMoney(stats.monthlyTotal);
+}
+
+function showSubscriptionsBanner(text) {
+var banner = document.getElementById('subscriptions-banner');
+document.getElementById('subscriptions-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadSubscriptions() {
+fetch(API_BASE + '/subscriptions')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var list = document.getElementById('subscriptions-list');
+if (result.status === 'not_connected') {
+showSubscriptionsBanner(result.reason || 'Subscriptions database is not connected yet.');
+list.innerHTML = '';
+return;
+}
+if (result.status !== 'ok') {
+showSubscriptionsBanner('Could not load subscriptions: ' + (result.message || 'unknown error'));
+list.innerHTML = '';
+return;
+}
+renderSubscriptionsStats(result.data.stats);
+list.innerHTML = result.data.subscriptions.length ? result.data.subscriptions.map(subscriptionRowHtml).join('') : '<div class="p-6 text-[13px] text-on-surface-variant text-center">No subscriptions tracked yet. Use "New Subscription" to add the first one.</div>';
+})
+.catch(function(err) {
+showSubscriptionsBanner('Could not reach the Subscriptions backend: ' + err.message);
+});
 }
 
 // ---- Workflows / Delivery board (placeholder demo data — Central Tasks is empty in Notion) ----
