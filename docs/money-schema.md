@@ -1,6 +1,6 @@
 # Money layer schema plan (Postgres, separate from Notion)
 
-Status: **applied.** All five tables and indexes below are live in the `ribahaus-money` Postgres database (Vercel Storage → Neon), connected to the `ribahaus-os` project with no custom env var prefix — so the connection string is exactly `process.env.POSTGRES_URL`, matching the code below. Rollout steps 1–3 (Invoices) are done; Expenses, Subscriptions, Ad Spend, Projections, and the Google Drive upload wiring (step 4) are still pending.
+Status: **applied.** All five tables and indexes below are live in the `ribahaus-money` Postgres database (Vercel Storage → Neon), connected to the `ribahaus-os` project with no custom env var prefix — so the connection string is exactly `process.env.POSTGRES_URL`, matching the code below. Rollout steps 1–3 are done: Invoices, Expenses, and Subscriptions all have live `lib/money-*.js` + `api/*.js` pairs, and the `index.html` frontend is wired up for all three (stat grid, banner, and list, populated from the real endpoints). Ad Spend, the computed Projections view, and the Google Drive upload wiring (step 4) are still pending.
 
 ## Why a separate store
 
@@ -125,6 +125,6 @@ This keeps the database small and fast, keeps the actual documents in a place Om
 
 1. ✅ Create the Vercel Postgres database, run the `CREATE TABLE` statements above. (`ribahaus-money` on Neon, connected to `ribahaus-os`.)
 2. ✅ Add `lib/db.js` (a thin Postgres client wrapper, same shape as `lib/notion-crm.js`) plus one `lib/money-*.js` + `api/*.js` pair per section, following the existing `{connected, reason}` / `{status, data}` contracts. (`lib/db.js` uses `@neondatabase/serverless`; declared in `package.json`.)
-3. ✅ Wire the Invoices view first (it's the one with the clearest manual workflow — issue, send, mark paid). `lib/money-invoices.js` + `api/invoices.js` are live: `GET /api/invoices` (list + rollup stats), `POST /api/invoices` (create), `PATCH /api/invoices?id=...` (update status/dates/Drive links).
-4. ⏳ Expenses and Subscriptions next, then the computed Projections view last since it depends on all the others having real data.
-5. ⏳ Add the Google service account and `drive-upload.js` alongside the Invoices wiring, since that's the first section that needs file attachments — `invoices.drive_file_id` / `drive_file_url` are already in the schema and in `lib/money-invoices.js`, just unpopulated until the upload endpoint exists.
+3. ✅ Wire Invoices, Expenses, and Subscriptions end to end — backend and frontend. `lib/money-invoices.js` + `api/invoices.js`, `lib/money-expenses.js` + `api/expenses.js`, and `lib/money-subscriptions.js` + `api/subscriptions.js` are all live (`GET` for list + rollup stats, `POST` to create, `PATCH ?id=...` to update). `index.html` now calls all three on view-show and renders the stat grid, connection banner, and row list for each, matching the pattern already used for Sales/Clients/Projects.
+4. ⏳ Ad Spend next, then the computed Projections view last since it depends on all the others having real data.
+5. ⏳ Add the Google service account and `drive-upload.js`, since Invoices/Expenses are the sections that need file attachments — `invoices.drive_file_id`/`drive_file_url` and `expenses.drive_file_id`/`drive_file_url` are already in the schema and in the `lib/money-*.js` modules, just unpopulated until the upload endpoint exists.
