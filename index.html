@@ -202,10 +202,12 @@ border-radius: 10px;
 <div class="font-label-caps text-[10px] text-on-surface-variant">Internal Admin</div>
 </div>
 </div>
-<div class="flex-1 space-y-1" id="sidebar-nav">
+<div class="flex-1 space-y-1 overflow-y-auto custom-scrollbar" id="sidebar-nav">
+<div class="px-6 pt-1 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Overview</div>
 <a class="sidebar-nav-link flex items-center gap-3 text-primary-fixed border-r-2 border-primary-fixed bg-surface-container-high px-6 py-3 font-label-caps text-label-caps" data-view="overview" href="#">
 <span class="material-symbols-outlined">dashboard</span> Home
 </a>
+<div class="px-6 pt-5 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Clients &amp; Work</div>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="sales" href="#">
 <span class="material-symbols-outlined">trending_up</span> Sales
 </a>
@@ -215,11 +217,35 @@ border-radius: 10px;
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="projects" href="#">
 <span class="material-symbols-outlined">account_tree</span> Projects
 </a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="adspend" href="#">
+<span class="material-symbols-outlined">ads_click</span> Ad Spend
+</a>
+<div class="px-6 pt-5 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Money</div>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="invoices" href="#">
+<span class="material-symbols-outlined">receipt_long</span> Invoices
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="expenses" href="#">
+<span class="material-symbols-outlined">payments</span> Expenses
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="subscriptions" href="#">
+<span class="material-symbols-outlined">autorenew</span> Subscriptions
+</a>
+<div class="px-6 pt-5 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Plan</div>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="projections" href="#">
+<span class="material-symbols-outlined">query_stats</span> Projections
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="reports" href="#">
+<span class="material-symbols-outlined">summarize</span> Reports
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="team" href="#">
+<span class="material-symbols-outlined">groups</span> Team
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="settings" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+</a>
+<div class="px-6 pt-5 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Agency</div>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="content" href="#">
 <span class="material-symbols-outlined">edit_calendar</span> Content
-</a>
-<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="finance" href="#">
-<span class="material-symbols-outlined">payments</span> Finance
 </a>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="library" href="#">
 <span class="material-symbols-outlined">inventory_2</span> Library
@@ -293,10 +319,10 @@ border-radius: 10px;
 </div>
 </div>
 <!-- Charts Row -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 gap-6 mb-8">
 <div class="glass-card rounded-xl p-8">
 <div class="flex justify-between items-center mb-8">
-<h4 class="text-[20px] font-bold text-on-surface">Deliverable velocity</h4>
+<h4 class="text-[20px] font-bold text-on-surface">Deliverable velocity <span class="text-on-surface-variant font-normal text-[12px]">(example data)</span></h4>
 <select class="bg-transparent border-none text-label-caps text-on-surface-variant focus:ring-0 cursor-pointer">
 <option class="bg-surface">Last 30 days</option>
 <option class="bg-surface">Last 60 days</option>
@@ -319,25 +345,6 @@ border-radius: 10px;
 <span>WK 41</span>
 <span>WK 42</span>
 <span>WK 43</span>
-</div>
-</div>
-<div class="glass-card rounded-xl p-8 flex items-center justify-between">
-<div class="max-w-[160px]">
-<h4 class="text-[20px] font-bold text-on-surface mb-2">Team capacity</h4>
-<p class="text-[12px] text-on-surface-variant mb-6">Across 12 core team members currently in-house.</p>
-<div class="flex items-center gap-2">
-<div class="w-3 h-3 rounded-full bg-primary-fixed"></div>
-<span class="font-label-caps text-[10px] text-on-surface">73% AVERAGE</span>
-</div>
-</div>
-<div class="relative w-40 h-40">
-<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
-<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="2.5"></path>
-<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2d51ff" stroke-dasharray="73, 100" stroke-linecap="round" stroke-width="2.5"></path>
-</svg>
-<div class="absolute inset-0 flex flex-col items-center justify-center">
-<span class="font-display-lg text-[32px] text-on-surface leading-none">73%</span>
-</div>
 </div>
 </div>
 </div>
@@ -418,16 +425,74 @@ border-radius: 10px;
 <h4 class="text-[16px] font-bold text-on-surface mb-4">Delivery board <span class="text-on-surface-variant font-normal text-[12px]">(example data — Central Tasks is empty in Notion)</span></h4>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="workflows-board"></div>
 </div>
+<!-- Ad Spend View -->
+<div class="view-panel hidden" id="view-adspend">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Ad spend tracking is being built on a new database layer (separate from Notion) so campaign-level spend and ROI can sit alongside your CRM data. Nothing is wired up yet — this activates once that connection is live.
+</div>
+</div>
+<!-- Invoices View -->
+<div class="view-panel hidden" id="view-invoices">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Invoices will be tracked here once the new database is connected — line items and totals live in the database, and the actual invoice file for each one is stored in Google Drive rather than duplicated here.
+</div>
+</div>
+<!-- Expenses View -->
+<div class="view-panel hidden" id="view-expenses">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Expense tracking is reserved for the same Money data layer as Invoices and Subscriptions. Nothing is wired up yet.
+</div>
+</div>
+<!-- Subscriptions View -->
+<div class="view-panel hidden" id="view-subscriptions">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Recurring subscriptions and software spend will live here once the new database is connected.
+</div>
+</div>
+<!-- Projections View -->
+<div class="view-panel hidden" id="view-projections">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Revenue and cash-flow projections will be calculated here from live Sales pipeline and Money data once both are connected — not hand-entered guesses.
+</div>
+</div>
+<!-- Reports View -->
+<div class="view-panel hidden" id="view-reports">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+Exportable reports across Sales, Clients, Projects, and Money will live here once those data sources are fully wired up.
+</div>
+</div>
+<!-- Team View -->
+<div class="view-panel hidden" id="view-team">
+<div class="glass-card rounded-xl p-8 flex flex-col lg:flex-row items-center justify-between gap-8">
+<div class="max-w-sm">
+<h4 class="text-[20px] font-bold text-on-surface mb-2">Team capacity <span class="text-on-surface-variant font-normal text-[12px]">(example data)</span></h4>
+<p class="text-[13px] text-on-surface-variant mb-6">Across 12 core team members currently in-house. Real per-person workload and utilization will land here once time tracking is wired up — this page is reserved for that and other team features.</p>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary-fixed"></div>
+<span class="font-label-caps text-[10px] text-on-surface">73% AVERAGE</span>
+</div>
+</div>
+<div class="relative w-48 h-48 shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="2.5"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#2d51ff" stroke-dasharray="73, 100" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-[40px] text-on-surface leading-none">73%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Settings View -->
+<div class="view-panel hidden" id="view-settings">
+<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
+System settings — data source connections, integrations, and team roles — will live here as the OS grows. Reserved for now.
+</div>
+</div>
 <!-- Content View -->
 <div class="view-panel hidden" id="view-content">
 <div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
 Content stays a thin layer over your existing tools for now — no separate content calendar module planned for this phase. This space is reserved for that layer once it's needed.
-</div>
-</div>
-<!-- Finance View -->
-<div class="view-panel hidden" id="view-finance">
-<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
-Finance is manual-entry in Notion for now (EGP). A dashboard view over that data is coming once there's a Finance data source wired up here.
 </div>
 </div>
 <!-- Library View (formerly Resources) -->
@@ -663,13 +728,20 @@ return 'EGP ' + Math.round(n).toLocaleString('en-US');
 
 var VIEWS = {
 overview: { eyebrow: 'Agency OS v2.0', title: 'Home', primary: 'New Project', secondary: 'Export Report', onShow: loadHome },
-sales: { eyebrow: 'Sales Pipeline', title: 'Sales', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadSales },
-clients: { eyebrow: 'Client Lifecycle', title: 'Clients', primary: 'Add Client', secondary: 'Sync Notion', onShow: loadClients },
-projects: { eyebrow: 'Delivery', title: 'Projects', primary: 'New Project', secondary: 'Filter', onShow: loadProjects },
-content: { eyebrow: 'Content', title: 'Content', primary: 'New Post', secondary: 'Filter' },
-finance: { eyebrow: 'Finance', title: 'Finance', primary: 'New Entry', secondary: 'Export' },
-library: { eyebrow: 'Agency Library', title: 'Library', primary: 'Upload', secondary: 'New Folder', onShow: renderResources },
-ai: { eyebrow: 'AI & Automations', title: 'AI & Automations', primary: 'New Automation', secondary: 'Settings' }
+sales: { eyebrow: 'Clients & Work', title: 'Sales', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadSales },
+clients: { eyebrow: 'Clients & Work', title: 'Clients', primary: 'Add Client', secondary: 'Sync Notion', onShow: loadClients },
+projects: { eyebrow: 'Clients & Work', title: 'Projects', primary: 'New Project', secondary: 'Filter', onShow: loadProjects },
+adspend: { eyebrow: 'Clients & Work', title: 'Ad Spend', primary: 'New Entry', secondary: 'Export' },
+invoices: { eyebrow: 'Money', title: 'Invoices', primary: 'New Invoice', secondary: 'Export' },
+expenses: { eyebrow: 'Money', title: 'Expenses', primary: 'New Expense', secondary: 'Export' },
+subscriptions: { eyebrow: 'Money', title: 'Subscriptions', primary: 'New Subscription', secondary: 'Export' },
+projections: { eyebrow: 'Plan', title: 'Projections', primary: 'New Scenario', secondary: 'Export' },
+reports: { eyebrow: 'Plan', title: 'Reports', primary: 'New Report', secondary: 'Export' },
+team: { eyebrow: 'Plan', title: 'Team', primary: 'Add Member', secondary: 'Settings' },
+settings: { eyebrow: 'Plan', title: 'Settings', primary: 'Save', secondary: 'Reset' },
+content: { eyebrow: 'Agency', title: 'Content', primary: 'New Post', secondary: 'Filter' },
+library: { eyebrow: 'Agency', title: 'Library', primary: 'Upload', secondary: 'New Folder', onShow: renderResources },
+ai: { eyebrow: 'Agency', title: 'AI & Automations', primary: 'New Automation', secondary: 'Settings' }
 };
 
 function switchView(name) {
