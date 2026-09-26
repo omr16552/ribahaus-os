@@ -1,0 +1,9 @@
+{
+  "name": "ribahaus-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RibaHaus OS API (Vercel serverless functions) backing the RibaHaus OS frontend.",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0"
+  }
+}
