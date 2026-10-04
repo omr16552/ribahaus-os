@@ -1,14 +1,14 @@
 # Money layer schema plan (Postgres, separate from Notion)
 
-Status: **applied.** All five tables and indexes below are live in the `ribahaus-money` Postgres database (Vercel Storage → Neon), connected to the `ribahaus-os` project with no custom env var prefix — so the connection string is exactly `process.env.POSTGRES_URL`, matching the code below. Rollout steps 1–3 are done: Invoices, Expenses, and Subscriptions all have live `lib/money-*.js` + `api/*.js` pairs, and the `index.html` frontend is wired up for all three (stat grid, banner, and list, populated from the real endpoints). Ad Spend, the computed Projections view, and the Google Drive upload wiring (step 4) are still pending.
+Status: **partly applied.** The `ribahaus-money` Postgres database (Vercel Storage → Neon, connected to `ribahaus-os`, connection string `process.env.POSTGRES_URL`) has the Money tables live. Invoices, Expenses, and Subscriptions have live `lib/money-*.js` + `api/*.js` pairs with the `index.html` frontend wired up. **Ad Spend was dropped** from the product (its page is replaced by Retainers and Proposals, below); the `ad_spend` table already exists in the database but is unused and can be dropped. **Retainers and Proposals** are built in code (`lib/money-retainers.js`, `lib/money-proposals.js`, `api/retainers.js`, `api/proposals.js`, frontend views) but their tables still need to be created by running the SQL in the sections below. Projections and file links are still pending.
 
 ## Why a separate store
 
-Notion stays the source of truth for Sales, Clients, and Projects (per the v2 brief). The sections below — Ad Spend, Invoices, Expenses, Subscriptions, and Projections — get their own Postgres database instead, because:
+Notion stays the source of truth for Sales, Clients, and Projects (per the v2 brief). The sections below — Invoices, Expenses, Subscriptions, Retainers, Proposals, and Projections — get their own Postgres database instead, because:
 
 - They're transactional/numeric data (totals, running balances) rather than freeform records — a real database with SQL aggregation is a better fit than a page-based tool.
-- Invoices and expenses need an actual file per record (the PDF/receipt), which is stored in Google Drive; Postgres holds only the metadata and a link to that file, never the file itself.
-- The app's frontend/API code doesn't need to know or care which store backs which section — `api/ad-spend.js`, `api/invoices.js`, etc. will follow the exact same `{status: 'ok'|'not_connected'|'error', data}` contract already used by `api/crm.js` and `api/projects.js`. Swapping Postgres for Supabase later (both are plain Postgres) is a connection-string change, not a rewrite.
+- Invoices and expenses need an actual file per record (the PDF/receipt), which is stored in Dropbox; Postgres holds only the metadata and a link to that file, never the file itself.
+- The app's frontend/API code doesn't need to know or care which store backs which section — `api/invoices.js`, `api/retainers.js`, etc. will follow the exact same `{status: 'ok'|'not_connected'|'error', data}` contract already used by `api/crm.js` and `api/projects.js`. Swapping Postgres for Supabase later (both are plain Postgres) is a connection-string change, not a rewrite.
 
 ## Cross-referencing Notion records
 
@@ -19,7 +19,7 @@ Postgres has no knowledge of Notion's page IDs as real foreign keys, so every ta
 
 ## Tables
 
-### `ad_spend`
+### `ad_spend` (retired — table exists but is unused; no code reads it)
 ```sql
 CREATE TABLE ad_spend (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -52,7 +52,7 @@ CREATE TABLE invoices (
   issue_date date NOT NULL,
   due_date date,
   paid_date date,
-  drive_file_id text,     -- Google Drive file id of the actual invoice PDF
+  drive_file_id text,     -- legacy name; will become a provider-neutral file id (files live in Dropbox)
   drive_file_url text,    -- shareable link, for one-click open from the UI
   notes text,
   created_at timestamptz NOT NULL DEFAULT now(),
@@ -111,20 +111,69 @@ CREATE TABLE projection_scenarios (
 );
 ```
 
-## Google Drive attachment pattern
+### `retainers`
+Replaces the Ad Spend page. One row per client contract; feeds renewals and (later) Projections with recurring revenue. `contract_url` is a Dropbox shared link.
+```sql
+CREATE TABLE retainers (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  client_notion_id text,
+  client_name text NOT NULL,
+  monthly_fee numeric(12,2) NOT NULL,
+  currency text NOT NULL DEFAULT 'EGP',
+  scope text,
+  start_date date NOT NULL,
+  end_date date,              -- null = open-ended
+  status text NOT NULL DEFAULT 'active',   -- active | paused | ended
+  auto_renew boolean NOT NULL DEFAULT false,
+  contract_url text,
+  notes text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX retainers_status_idx ON retainers (status);
+CREATE INDEX retainers_client_idx ON retainers (client_notion_id);
+CREATE INDEX retainers_end_idx ON retainers (end_date);
+```
+`GET /api/retainers` returns the list plus stats: active count, monthly recurring revenue, retainers ending within 30/60/90 days, and active retainers already past their end date.
 
-For Invoices and Expenses, the file itself never touches Postgres:
+### `proposals`
+Sits between a Sales lead and a signed retainer. `file_url` is a Dropbox shared link.
+```sql
+CREATE TABLE proposals (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  client_notion_id text,
+  client_name text NOT NULL,
+  value numeric(12,2) NOT NULL,
+  currency text NOT NULL DEFAULT 'EGP',
+  status text NOT NULL DEFAULT 'draft',    -- draft | sent | accepted | lost
+  sent_date date,
+  valid_until date,
+  file_url text,
+  notes text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX proposals_status_idx ON proposals (status);
+CREATE INDEX proposals_client_idx ON proposals (client_notion_id);
+```
+`GET /api/proposals` returns the list plus stats: open count and value (draft + sent), accepted value, and win rate (accepted / accepted + lost).
 
-1. A Google service account (Drive API scope) gets edit access to one Drive folder per record type (or one shared folder with subfolders).
-2. A new `api/drive-upload.js` serverless function accepts a file, uploads it to that folder via the service account, and returns `{fileId, fileUrl}`.
-3. The invoice/expense row stores `drive_file_id` and `drive_file_url` from that response — nothing else changes about how the row is queried or displayed.
+## File storage: Dropbox (links first)
 
-This keeps the database small and fast, keeps the actual documents in a place Omar can also browse directly in Drive, and means switching file storage later (e.g. to S3) only touches `drive-upload.js`, not the data model.
+Invoices, expense receipts, contracts, proposals, and reports are created by hand and filed in Dropbox, which has the larger storage. Postgres never holds files, only references.
+
+- **Phase 1 (current plan):** each record carries a pasted Dropbox shared link and the UI shows a "view file" button. No Dropbox API, app, or secrets needed. `retainers.contract_url` and `proposals.file_url` already work this way. `invoices` and `expenses` still have the older `drive_file_id` / `drive_file_url` columns, which will be renamed to provider-neutral names (for example `file_provider`, `file_id`, `file_url`) in a follow-up.
+- **Phase 2 (when the agency brain is built):** a Dropbox app with read access so the knowledge base can index the folders, plus an optional picker and upload from the UI. Credentials go straight into Vercel environment variables, never into chat or code.
+- Keep a consistent folder and naming convention (for example `/Invoices/2026/INV-0042 - Client.pdf`); the brain's search quality depends on it.
 
 ## Rollout order
 
 1. ✅ Create the Vercel Postgres database, run the `CREATE TABLE` statements above. (`ribahaus-money` on Neon, connected to `ribahaus-os`.)
 2. ✅ Add `lib/db.js` (a thin Postgres client wrapper, same shape as `lib/notion-crm.js`) plus one `lib/money-*.js` + `api/*.js` pair per section, following the existing `{connected, reason}` / `{status, data}` contracts. (`lib/db.js` uses `@neondatabase/serverless`; declared in `package.json`.)
 3. ✅ Wire Invoices, Expenses, and Subscriptions end to end — backend and frontend. `lib/money-invoices.js` + `api/invoices.js`, `lib/money-expenses.js` + `api/expenses.js`, and `lib/money-subscriptions.js` + `api/subscriptions.js` are all live (`GET` for list + rollup stats, `POST` to create, `PATCH ?id=...` to update). `index.html` now calls all three on view-show and renders the stat grid, connection banner, and row list for each, matching the pattern already used for Sales/Clients/Projects.
-4. ⏳ Ad Spend next, then the computed Projections view last since it depends on all the others having real data.
-5. ⏳ Add the Google service account and `drive-upload.js`, since Invoices/Expenses are the sections that need file attachments — `invoices.drive_file_id`/`drive_file_url` and `expenses.drive_file_id`/`drive_file_url` are already in the schema and in the `lib/money-*.js` modules, just unpopulated until the upload endpoint exists.
+4. ✅ (code) Replace Ad Spend with Retainers and Proposals: backend files and frontend views are written and tested against a mocked database. ⏳ Still to do: run the `retainers` and `proposals` `CREATE TABLE` statements in the Neon query console.
+5. ⏳ Add the "Dropbox link" field to the Invoices and Expenses records (Phase 1 above).
+6. ⏳ Computed Projections view, using retainer recurring revenue plus the Sales pipeline and the other Money tables.
+7. ⏳ Entry forms for the Money screens (the "New …" buttons are placeholders; the endpoints already support create and update).
+8. ⏳ Auth and team roles, then the agency brain (pgvector knowledge base, same Postgres) last.
