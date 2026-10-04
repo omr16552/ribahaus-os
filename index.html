@@ -217,8 +217,11 @@ border-radius: 10px;
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="projects" href="#">
 <span class="material-symbols-outlined">account_tree</span> Projects
 </a>
-<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="adspend" href="#">
-<span class="material-symbols-outlined">ads_click</span> Ad Spend
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="retainers" href="#">
+<span class="material-symbols-outlined">event_repeat</span> Retainers
+</a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="proposals" href="#">
+<span class="material-symbols-outlined">request_quote</span> Proposals
 </a>
 <div class="px-6 pt-5 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Money</div>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="invoices" href="#">
@@ -425,11 +428,57 @@ border-radius: 10px;
 <h4 class="text-[16px] font-bold text-on-surface mb-4">Delivery board <span class="text-on-surface-variant font-normal text-[12px]">(example data — Central Tasks is empty in Notion)</span></h4>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="workflows-board"></div>
 </div>
-<!-- Ad Spend View -->
-<div class="view-panel hidden" id="view-adspend">
-<div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
-Ad spend tracking is being built on a new database layer (separate from Notion) so campaign-level spend and ROI can sit alongside your CRM data. Nothing is wired up yet — this activates once that connection is live.
+<!-- Retainers View -->
+<div class="view-panel hidden" id="view-retainers">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="retainers-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Active retainers</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="retainers-stat-active">--</div>
 </div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Monthly recurring</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="retainers-stat-monthly">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Renewing in 30 days</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="retainers-stat-30">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Renewing in 90 days</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="retainers-stat-90">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="retainers-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="retainers-banner-text"></span>
+</div>
+<div class="glass-card rounded-xl divide-y divide-outline-variant" id="retainers-list"></div>
+</div>
+<!-- Proposals View -->
+<div class="view-panel hidden" id="view-proposals">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="proposals-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Open proposals</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="proposals-stat-open">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Open value</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="proposals-stat-openvalue">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Accepted value</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="proposals-stat-accepted">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Win rate</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="proposals-stat-winrate">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="proposals-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="proposals-banner-text"></span>
+</div>
+<div class="glass-card rounded-xl divide-y divide-outline-variant" id="proposals-list"></div>
 </div>
 <!-- Invoices View -->
 <div class="view-panel hidden" id="view-invoices">
@@ -783,7 +832,8 @@ overview: { eyebrow: 'Agency OS v2.0', title: 'Home', primary: 'New Project', se
 sales: { eyebrow: 'Clients & Work', title: 'Sales', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadSales },
 clients: { eyebrow: 'Clients & Work', title: 'Clients', primary: 'Add Client', secondary: 'Sync Notion', onShow: loadClients },
 projects: { eyebrow: 'Clients & Work', title: 'Projects', primary: 'New Project', secondary: 'Filter', onShow: loadProjects },
-adspend: { eyebrow: 'Clients & Work', title: 'Ad Spend', primary: 'New Entry', secondary: 'Export' },
+retainers: { eyebrow: 'Clients & Work', title: 'Retainers', primary: 'New Retainer', secondary: 'Export', onShow: loadRetainers },
+proposals: { eyebrow: 'Clients & Work', title: 'Proposals', primary: 'New Proposal', secondary: 'Export', onShow: loadProposals },
 invoices: { eyebrow: 'Money', title: 'Invoices', primary: 'New Invoice', secondary: 'Export', onShow: loadInvoices },
 expenses: { eyebrow: 'Money', title: 'Expenses', primary: 'New Expense', secondary: 'Export', onShow: loadExpenses },
 subscriptions: { eyebrow: 'Money', title: 'Subscriptions', primary: 'New Subscription', secondary: 'Export', onShow: loadSubscriptions },
@@ -1107,6 +1157,131 @@ document.getElementById('projects-banner-text').textContent = 'Could not reach t
 document.getElementById('projects-banner').classList.remove('hidden');
 });
 renderWorkflows();
+}
+
+// ---- Shared: safe external link (Dropbox shared links) ----
+function safeLinkHtml(url, label) {
+if (!url || !/^https?:\/\//i.test(url)) return '';
+return '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer" class="text-primary-fixed hover:underline">' + escapeHtml(label) + '</a>';
+}
+
+// ---- Retainers ----
+function retainerRowHtml(row) {
+var statusColor = row.status === 'active' ? 'bg-green-500/10 text-green-400' : row.status === 'paused' ? 'bg-amber-500/10 text-amber-400' : 'bg-surface-container-highest text-on-surface-variant';
+var dueNote = '';
+if (row.status === 'active' && row.daysToEnd !== null && row.daysToEnd !== undefined) {
+if (row.daysToEnd < 0) dueNote = '<span class="text-red-400">expired ' + Math.abs(row.daysToEnd) + 'd ago</span>';
+else if (row.daysToEnd <= 30) dueNote = '<span class="text-amber-400">ends in ' + row.daysToEnd + 'd</span>';
+else dueNote = 'ends in ' + row.daysToEnd + 'd';
+}
+var contract = safeLinkHtml(row.contractUrl, 'Contract');
+return '' +
+'<div class="p-4 flex items-center justify-between gap-4">' +
+'<div class="flex-1 min-w-0">' +
+'<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.clientName) + (row.autoRenew ? ' <span class="font-label-caps text-[9px] text-on-surface-variant">AUTO-RENEW</span>' : '') + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.scope || '') + (contract ? (row.scope ? ' &middot; ' : '') + contract : '') + '</div>' +
+'</div>' +
+'<div class="text-right shrink-0">' +
+'<div class="font-bold text-on-surface text-[14px]">' + formatMoney(row.monthlyFee) + ' / mo</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(row.startDate || '') + (row.endDate ? ' &ndash; ' + escapeHtml(row.endDate) : ' &ndash; open-ended') + (dueNote ? ' &middot; ' + dueNote : '') + '</div>' +
+'</div>' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] shrink-0 ' + statusColor + '">' + escapeHtml((row.status || '').toUpperCase()) + '</span>' +
+'</div>';
+}
+
+function renderRetainersStats(stats) {
+if (!stats) return;
+document.getElementById('retainers-stat-active').textContent = stats.activeCount;
+document.getElementById('retainers-stat-monthly').textContent = formatMoney(stats.monthlyRecurring);
+document.getElementById('retainers-stat-30').textContent = stats.renewing30;
+document.getElementById('retainers-stat-90').textContent = stats.renewing90;
+}
+
+function showRetainersBanner(text) {
+var banner = document.getElementById('retainers-banner');
+document.getElementById('retainers-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadRetainers() {
+fetch(API_BASE + '/retainers')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var list = document.getElementById('retainers-list');
+if (result.status === 'not_connected') {
+showRetainersBanner(result.reason || 'Retainers database is not connected yet.');
+list.innerHTML = '';
+return;
+}
+if (result.status !== 'ok') {
+showRetainersBanner('Could not load retainers: ' + (result.message || 'unknown error'));
+list.innerHTML = '';
+return;
+}
+renderRetainersStats(result.data.stats);
+if (result.data.stats && result.data.stats.expiredActive > 0) {
+showRetainersBanner(result.data.stats.expiredActive + ' active retainer(s) are past their end date — renew or mark them ended.');
+}
+list.innerHTML = result.data.retainers.length ? result.data.retainers.map(retainerRowHtml).join('') : '<div class="p-6 text-[13px] text-on-surface-variant text-center">No retainers yet. Use "New Retainer" to add the first one.</div>';
+})
+.catch(function(err) {
+showRetainersBanner('Could not reach the Retainers backend: ' + err.message);
+});
+}
+
+// ---- Proposals ----
+function proposalRowHtml(row) {
+var statusColor = row.status === 'accepted' ? 'bg-green-500/10 text-green-400' : row.status === 'lost' ? 'bg-red-500/10 text-red-400' : row.status === 'sent' ? 'bg-blue-500/10 text-blue-400' : 'bg-surface-container-highest text-on-surface-variant';
+var file = safeLinkHtml(row.fileUrl, 'View file');
+return '' +
+'<div class="p-4 flex items-center justify-between gap-4">' +
+'<div class="flex-1 min-w-0">' +
+'<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.title) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.clientName) + (file ? ' &middot; ' + file : '') + '</div>' +
+'</div>' +
+'<div class="text-right shrink-0">' +
+'<div class="font-bold text-on-surface text-[14px]">' + formatMoney(row.value) + '</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + (row.sentDate ? 'sent ' + escapeHtml(row.sentDate) : 'not sent') + (row.validUntil ? ' &middot; valid until ' + escapeHtml(row.validUntil) : '') + '</div>' +
+'</div>' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] shrink-0 ' + statusColor + '">' + escapeHtml((row.status || '').toUpperCase()) + '</span>' +
+'</div>';
+}
+
+function renderProposalsStats(stats) {
+if (!stats) return;
+document.getElementById('proposals-stat-open').textContent = stats.openCount;
+document.getElementById('proposals-stat-openvalue').textContent = formatMoney(stats.openValue);
+document.getElementById('proposals-stat-accepted').textContent = formatMoney(stats.acceptedValue);
+document.getElementById('proposals-stat-winrate').textContent = stats.winRate === null || stats.winRate === undefined ? '--' : stats.winRate + '%';
+}
+
+function showProposalsBanner(text) {
+var banner = document.getElementById('proposals-banner');
+document.getElementById('proposals-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function loadProposals() {
+fetch(API_BASE + '/proposals')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+var list = document.getElementById('proposals-list');
+if (result.status === 'not_connected') {
+showProposalsBanner(result.reason || 'Proposals database is not connected yet.');
+list.innerHTML = '';
+return;
+}
+if (result.status !== 'ok') {
+showProposalsBanner('Could not load proposals: ' + (result.message || 'unknown error'));
+list.innerHTML = '';
+return;
+}
+renderProposalsStats(result.data.stats);
+list.innerHTML = result.data.proposals.length ? result.data.proposals.map(proposalRowHtml).join('') : '<div class="p-6 text-[13px] text-on-surface-variant text-center">No proposals yet. Use "New Proposal" to add the first one.</div>';
+})
+.catch(function(err) {
+showProposalsBanner('Could not reach the Proposals backend: ' + err.message);
+});
 }
 
 // ---- Invoices ----
