@@ -1,6 +1,6 @@
 # Money layer schema plan (Postgres, separate from Notion)
 
-Status: **partly applied.** The `ribahaus-money` Postgres database (Vercel Storage → Neon, connected to `ribahaus-os`, connection string `process.env.POSTGRES_URL`) has the Money tables live. Invoices, Expenses, and Subscriptions have live `lib/money-*.js` + `api/*.js` pairs with the `index.html` frontend wired up. **Ad Spend was dropped** from the product (its page is replaced by Retainers and Proposals, below); the `ad_spend` table already exists in the database but is unused and can be dropped. **Retainers and Proposals** are built in code (`lib/money-retainers.js`, `lib/money-proposals.js`, `api/retainers.js`, `api/proposals.js`, frontend views) but their tables still need to be created by running the SQL in the sections below. Projections and file links are still pending.
+Status: **partly applied.** The `ribahaus-money` Postgres database (Vercel Storage → Neon, connected to `ribahaus-os`, connection string `process.env.POSTGRES_URL`) has the Money tables live. Invoices, Expenses, and Subscriptions have live `lib/money-*.js` + `api/*.js` pairs with the `index.html` frontend wired up. **Ad Spend was dropped** from the product (its page is replaced by Retainers and Proposals, below); the `ad_spend` table already exists in the database but is unused and can be dropped. **Retainers and Proposals** are built in code (`lib/money-retainers.js`, `lib/money-proposals.js`, `api/retainers.js`, `api/proposals.js`, frontend views) but their tables are created and live in Neon. **Entry forms** for all five Money and Clients & Work screens are live, and invoices and expenses accept a Dropbox link. The computed Projections view is still pending.
 
 ## Why a separate store
 
@@ -163,7 +163,7 @@ CREATE INDEX proposals_client_idx ON proposals (client_notion_id);
 
 Invoices, expense receipts, contracts, proposals, and reports are created by hand and filed in Dropbox, which has the larger storage. Postgres never holds files, only references.
 
-- **Phase 1 (current plan):** each record carries a pasted Dropbox shared link and the UI shows a "view file" button. No Dropbox API, app, or secrets needed. `retainers.contract_url` and `proposals.file_url` already work this way. `invoices` and `expenses` still have the older `drive_file_id` / `drive_file_url` columns, which will be renamed to provider-neutral names (for example `file_provider`, `file_id`, `file_url`) in a follow-up.
+- **Phase 1 (current plan):** each record carries a pasted Dropbox shared link and the UI shows a "view file" button. No Dropbox API, app, or secrets needed. `retainers.contract_url` and `proposals.file_url` already work this way. `invoices` and `expenses` store the link in the older `drive_file_url` column (with an unused `drive_file_id`), which will be renamed to provider-neutral names (for example `file_provider`, `file_id`, `file_url`) in a follow-up.
 - **Phase 2 (when the agency brain is built):** a Dropbox app with read access so the knowledge base can index the folders, plus an optional picker and upload from the UI. Credentials go straight into Vercel environment variables, never into chat or code.
 - Keep a consistent folder and naming convention (for example `/Invoices/2026/INV-0042 - Client.pdf`); the brain's search quality depends on it.
 
@@ -172,8 +172,8 @@ Invoices, expense receipts, contracts, proposals, and reports are created by han
 1. ✅ Create the Vercel Postgres database, run the `CREATE TABLE` statements above. (`ribahaus-money` on Neon, connected to `ribahaus-os`.)
 2. ✅ Add `lib/db.js` (a thin Postgres client wrapper, same shape as `lib/notion-crm.js`) plus one `lib/money-*.js` + `api/*.js` pair per section, following the existing `{connected, reason}` / `{status, data}` contracts. (`lib/db.js` uses `@neondatabase/serverless`; declared in `package.json`.)
 3. ✅ Wire Invoices, Expenses, and Subscriptions end to end — backend and frontend. `lib/money-invoices.js` + `api/invoices.js`, `lib/money-expenses.js` + `api/expenses.js`, and `lib/money-subscriptions.js` + `api/subscriptions.js` are all live (`GET` for list + rollup stats, `POST` to create, `PATCH ?id=...` to update). `index.html` now calls all three on view-show and renders the stat grid, connection banner, and row list for each, matching the pattern already used for Sales/Clients/Projects.
-4. ✅ (code) Replace Ad Spend with Retainers and Proposals: backend files and frontend views are written and tested against a mocked database. ⏳ Still to do: run the `retainers` and `proposals` `CREATE TABLE` statements in the Neon query console.
-5. ⏳ Add the "Dropbox link" field to the Invoices and Expenses records (Phase 1 above).
+4. ✅ (code) Replace Ad Spend with Retainers and Proposals: backend files and frontend views are written and tested against a mocked database. ✅ The `retainers` and `proposals` tables are created in Neon (via a single `DO $$ ... $$` block, since the console runs one statement at a time).
+5. ✅ Dropbox link field on Invoices and Expenses (stored in `drive_file_url`; rows show a "View file" / "View receipt" link).
 6. ⏳ Computed Projections view, using retainer recurring revenue plus the Sales pipeline and the other Money tables.
-7. ⏳ Entry forms for the Money screens (the "New …" buttons are placeholders; the endpoints already support create and update).
+7. ✅ Entry forms: the "New …" button on Retainers, Proposals, Invoices, Expenses, and Subscriptions opens a modal that POSTs to the matching endpoint. Editing existing rows (for example marking an invoice paid) is not built yet; the PATCH endpoints exist.
 8. ⏳ Auth and team roles, then the agency brain (pgvector knowledge base, same Postgres) last.
