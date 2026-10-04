@@ -651,6 +651,23 @@ This is the reserved home for automations and AI-driven workflows across the OS.
 <span class="text-[10px] font-label-caps">Profile</span>
 </button>
 </nav>
+<!-- Entry form modal (Money / Clients & Work screens) -->
+<div class="hidden fixed inset-0 z-[60] bg-black/60 items-center justify-center p-4" id="entry-modal">
+<div class="glass-card rounded-xl w-full max-w-[480px] max-h-[88vh] overflow-y-auto custom-scrollbar p-6" style="background: var(--surface-container);">
+<div class="flex items-center justify-between mb-5">
+<h3 class="font-display-lg text-[22px] text-on-surface" id="entry-modal-title">New entry</h3>
+<button class="text-on-surface-variant hover:text-on-surface p-1" id="entry-modal-close" type="button"><span class="material-symbols-outlined text-[20px]">close</span></button>
+</div>
+<form id="entry-form" novalidate>
+<div class="space-y-4" id="entry-fields"></div>
+<div class="hidden mt-4 text-[13px] text-red-400" id="entry-error"></div>
+<div class="flex justify-end gap-3 mt-6">
+<button class="px-4 py-2 border border-outline-variant rounded-full text-on-surface text-label-caps hover:bg-surface-container-highest transition-all" id="entry-cancel" type="button">Cancel</button>
+<button class="px-4 py-2 bg-primary-fixed text-white font-bold rounded-full text-label-caps hover:bg-primary-container transition-all disabled:opacity-50" id="entry-submit" type="submit">Save</button>
+</div>
+</form>
+</div>
+</div>
 <!-- Agent Chat Widget (RibaHaus OS Phase 4) -->
 <button class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary-fixed text-white shadow-lg flex items-center justify-center hover:bg-primary-container transition-all active:scale-95" id="agent-chat-toggle">
 <span class="material-symbols-outlined" id="agent-chat-toggle-icon">chat</span>
@@ -846,8 +863,11 @@ library: { eyebrow: 'Agency', title: 'Library', primary: 'Upload', secondary: 'N
 ai: { eyebrow: 'Agency', title: 'AI & Automations', primary: 'New Automation', secondary: 'Settings' }
 };
 
+var currentView = 'overview';
+
 function switchView(name) {
 if (!VIEWS[name]) name = 'overview';
+currentView = name;
 document.querySelectorAll('.view-panel').forEach(function(v) { v.classList.add('hidden'); });
 var el = document.getElementById('view-' + name);
 if (el) el.classList.remove('hidden');
@@ -1291,7 +1311,7 @@ return '' +
 '<div class="p-4 flex items-center justify-between gap-4">' +
 '<div class="flex-1 min-w-0">' +
 '<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.invoiceNumber) + '</div>' +
-'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.clientName) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.clientName) + (safeLinkHtml(row.driveFileUrl, 'View file') ? ' &middot; ' + safeLinkHtml(row.driveFileUrl, 'View file') : '') + '</div>' +
 '</div>' +
 '<div class="text-right shrink-0">' +
 '<div class="font-bold text-on-surface text-[14px]">' + formatMoney(row.amount) + '</div>' +
@@ -1344,7 +1364,7 @@ return '' +
 '<div class="p-4 flex items-center justify-between gap-4">' +
 '<div class="flex-1 min-w-0">' +
 '<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(row.vendor) + '</div>' +
-'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.expenseDate || '') + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(row.expenseDate || '') + (safeLinkHtml(row.driveFileUrl, 'View receipt') ? ' &middot; ' + safeLinkHtml(row.driveFileUrl, 'View receipt') : '') + '</div>' +
 '</div>' +
 '<div class="text-right font-bold text-on-surface text-[14px] shrink-0">' + formatMoney(row.amount) + '</div>' +
 '<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-caps text-[9px] shrink-0">' + escapeHtml((row.category || '').toUpperCase()) + '</span>' +
@@ -1441,6 +1461,187 @@ list.innerHTML = result.data.subscriptions.length ? result.data.subscriptions.ma
 showSubscriptionsBanner('Could not reach the Subscriptions backend: ' + err.message);
 });
 }
+
+// ---- Entry forms (New Retainer / Proposal / Invoice / Expense / Subscription) ----
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+var FORMS = {
+retainers: {
+title: 'New Retainer', endpoint: '/retainers', reload: loadRetainers,
+fields: [
+{ name: 'clientName', label: 'Client', type: 'text', required: true },
+{ name: 'monthlyFee', label: 'Monthly fee (EGP)', type: 'number', required: true },
+{ name: 'scope', label: 'Scope', type: 'text' },
+{ name: 'startDate', label: 'Start date', type: 'date', required: true, value: todayStr },
+{ name: 'endDate', label: 'End date (blank = open-ended)', type: 'date' },
+{ name: 'autoRenew', label: 'Auto-renews', type: 'checkbox' },
+{ name: 'contractUrl', label: 'Contract link (Dropbox)', type: 'url' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+proposals: {
+title: 'New Proposal', endpoint: '/proposals', reload: loadProposals,
+fields: [
+{ name: 'title', label: 'Title', type: 'text', required: true },
+{ name: 'clientName', label: 'Client', type: 'text', required: true },
+{ name: 'value', label: 'Value (EGP)', type: 'number', required: true },
+{ name: 'status', label: 'Status', type: 'select', options: ['draft', 'sent', 'accepted', 'lost'], value: 'draft' },
+{ name: 'sentDate', label: 'Sent date', type: 'date' },
+{ name: 'validUntil', label: 'Valid until', type: 'date' },
+{ name: 'fileUrl', label: 'File link (Dropbox)', type: 'url' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+invoices: {
+title: 'New Invoice', endpoint: '/invoices', reload: loadInvoices,
+fields: [
+{ name: 'invoiceNumber', label: 'Invoice number', type: 'text', required: true },
+{ name: 'clientName', label: 'Client', type: 'text', required: true },
+{ name: 'amount', label: 'Amount (EGP)', type: 'number', required: true },
+{ name: 'status', label: 'Status', type: 'select', options: ['draft', 'sent', 'paid', 'overdue', 'void'], value: 'draft' },
+{ name: 'issueDate', label: 'Issue date', type: 'date', required: true, value: todayStr },
+{ name: 'dueDate', label: 'Due date', type: 'date' },
+{ name: 'fileUrl', label: 'File link (Dropbox)', type: 'url' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+expenses: {
+title: 'New Expense', endpoint: '/expenses', reload: loadExpenses,
+fields: [
+{ name: 'vendor', label: 'Vendor', type: 'text', required: true },
+{ name: 'category', label: 'Category', type: 'select', options: ['Software', 'Payroll', 'Rent', 'Contractors', 'Marketing', 'Other'], value: 'Software' },
+{ name: 'amount', label: 'Amount (EGP)', type: 'number', required: true },
+{ name: 'expenseDate', label: 'Date', type: 'date', required: true, value: todayStr },
+{ name: 'fileUrl', label: 'Receipt link (Dropbox)', type: 'url' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+subscriptions: {
+title: 'New Subscription', endpoint: '/subscriptions', reload: loadSubscriptions,
+fields: [
+{ name: 'name', label: 'Name', type: 'text', required: true },
+{ name: 'vendor', label: 'Vendor', type: 'text' },
+{ name: 'amount', label: 'Amount (EGP)', type: 'number', required: true },
+{ name: 'billingCycle', label: 'Billing cycle', type: 'select', options: ['monthly', 'quarterly', 'yearly'], value: 'monthly' },
+{ name: 'nextRenewalDate', label: 'Next renewal', type: 'date' },
+{ name: 'status', label: 'Status', type: 'select', options: ['active', 'paused', 'cancelled'], value: 'active' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+}
+};
+
+var activeForm = null;
+var INPUT_CLASS = 'w-full bg-surface-container-highest border-none rounded-lg px-3 py-2 text-[13px] text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary-fixed';
+
+function openEntryForm(viewName) {
+var cfg = FORMS[viewName];
+if (!cfg) return;
+activeForm = viewName;
+document.getElementById('entry-modal-title').textContent = cfg.title;
+var wrap = document.getElementById('entry-fields');
+wrap.innerHTML = '';
+cfg.fields.forEach(function(f) {
+var row = document.createElement('div');
+var label = document.createElement('label');
+label.className = f.type === 'checkbox' ? 'flex items-center gap-2 text-[13px] text-on-surface' : 'block';
+var caption = document.createElement('span');
+caption.className = f.type === 'checkbox' ? '' : 'block font-label-caps text-[10px] text-on-surface-variant uppercase mb-1';
+caption.textContent = f.label + (f.required ? ' *' : '');
+var input;
+if (f.type === 'select') {
+input = document.createElement('select');
+f.options.forEach(function(o) { var opt = document.createElement('option'); opt.value = o; opt.textContent = o; input.appendChild(opt); });
+} else if (f.type === 'textarea') {
+input = document.createElement('textarea');
+input.rows = 3;
+} else {
+input = document.createElement('input');
+input.type = f.type;
+if (f.type === 'number') { input.step = '0.01'; input.min = '0'; }
+if (f.type === 'url') input.placeholder = 'https://www.dropbox.com/...';
+}
+input.name = f.name;
+if (f.type !== 'checkbox') input.className = INPUT_CLASS;
+var def = typeof f.value === 'function' ? f.value() : f.value;
+if (def !== undefined && f.type !== 'checkbox') input.value = def;
+if (f.type === 'checkbox') { label.appendChild(input); label.appendChild(caption); }
+else { label.appendChild(caption); label.appendChild(input); }
+row.appendChild(label);
+wrap.appendChild(row);
+});
+document.getElementById('entry-error').classList.add('hidden');
+document.getElementById('entry-submit').disabled = false;
+document.getElementById('entry-modal').classList.remove('hidden');
+document.getElementById('entry-modal').classList.add('flex');
+var first = wrap.querySelector('input, select, textarea');
+if (first) first.focus();
+}
+
+function closeEntryForm() {
+document.getElementById('entry-modal').classList.add('hidden');
+document.getElementById('entry-modal').classList.remove('flex');
+activeForm = null;
+}
+
+function showEntryError(msg) {
+var el = document.getElementById('entry-error');
+el.textContent = msg;
+el.classList.remove('hidden');
+}
+
+function submitEntryForm(e) {
+e.preventDefault();
+var cfg = FORMS[activeForm];
+if (!cfg) return;
+var form = document.getElementById('entry-form');
+var body = {};
+for (var i = 0; i < cfg.fields.length; i++) {
+var f = cfg.fields[i];
+var el = form.elements[f.name];
+if (f.type === 'checkbox') { body[f.name] = el.checked; continue; }
+var raw = (el.value || '').trim();
+if (!raw) {
+if (f.required) { showEntryError(f.label + ' is required.'); el.focus(); return; }
+continue;
+}
+if (f.type === 'number') {
+var n = Number(raw);
+if (!isFinite(n) || n < 0) { showEntryError(f.label + ' must be a valid positive number.'); el.focus(); return; }
+body[f.name] = n;
+} else if (f.type === 'url') {
+if (!/^https?:\/\//i.test(raw)) { showEntryError(f.label + ' must start with http:// or https://'); el.focus(); return; }
+body[f.name] = raw;
+} else {
+body[f.name] = raw;
+}
+}
+var submitBtn = document.getElementById('entry-submit');
+submitBtn.disabled = true;
+document.getElementById('entry-error').classList.add('hidden');
+fetch(API_BASE + cfg.endpoint, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(body)
+})
+.then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+.then(function(result) {
+if (result.data.status === 'not_connected') { showEntryError(result.data.reason || 'The database is not connected yet.'); submitBtn.disabled = false; return; }
+if (!result.ok || result.data.status !== 'ok') { showEntryError('Could not save: ' + (result.data.message || 'unknown error')); submitBtn.disabled = false; return; }
+closeEntryForm();
+cfg.reload();
+})
+.catch(function(err) {
+showEntryError('Could not reach the backend: ' + err.message);
+submitBtn.disabled = false;
+});
+}
+
+document.getElementById('page-action-primary').addEventListener('click', function() { openEntryForm(currentView); });
+document.getElementById('entry-form').addEventListener('submit', submitEntryForm);
+document.getElementById('entry-modal-close').addEventListener('click', closeEntryForm);
+document.getElementById('entry-cancel').addEventListener('click', closeEntryForm);
+document.getElementById('entry-modal').addEventListener('click', function(e) { if (e.target === this) closeEntryForm(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && activeForm) closeEntryForm(); });
 
 // ---- Workflows / Delivery board (placeholder demo data — Central Tasks is empty in Notion) ----
 var DEMO_TASKS = [
