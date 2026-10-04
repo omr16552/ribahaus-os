@@ -224,6 +224,9 @@ border-radius: 10px;
 <span class="material-symbols-outlined">request_quote</span> Proposals
 </a>
 <div class="px-6 pt-5 pb-2 font-label-caps text-[10px] text-on-surface-variant/70 uppercase tracking-widest">Money</div>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="finance" href="#">
+<span class="material-symbols-outlined">account_balance</span> Finance
+</a>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="invoices" href="#">
 <span class="material-symbols-outlined">receipt_long</span> Invoices
 </a>
@@ -550,6 +553,59 @@ border-radius: 10px;
 </div>
 <div class="glass-card rounded-xl divide-y divide-outline-variant" id="subscriptions-list"></div>
 </div>
+<!-- Finance View -->
+<div class="view-panel hidden" id="view-finance">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="finance-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Net profit</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="finance-stat-net">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Income (paid)</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="finance-stat-income">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Total costs</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="finance-stat-costs">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Pending payroll</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="finance-stat-pending">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="finance-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="finance-banner-text"></span>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+<div class="flex items-center gap-2 text-[13px] text-on-surface-variant">
+<label for="finance-months" class="font-label-caps text-[10px] uppercase">Period</label>
+<select id="finance-months" class="bg-surface-container-highest border-none rounded-lg px-3 py-1.5 text-[13px] text-on-surface">
+<option value="3">Last 3 months</option>
+<option value="6" selected>Last 6 months</option>
+<option value="12">Last 12 months</option>
+</select>
+</div>
+<button class="px-4 py-2 border border-outline-variant rounded-full text-on-surface text-label-caps hover:bg-surface-container-highest transition-all" id="finance-copy-salaries" type="button">Copy salaries from last month</button>
+</div>
+<h4 class="text-[16px] font-bold text-on-surface mb-3">Monthly profit &amp; loss</h4>
+<div class="glass-card rounded-xl overflow-x-auto mb-2" id="finance-pnl"></div>
+<div class="text-[11px] text-on-surface-variant mb-8">Income is cash received (invoices marked paid). Team costs count in the month they are for, expenses by their date, subscriptions at today&#39;s monthly run-rate. Log payroll and freelancers in the ledger below rather than as Expenses, so nothing is counted twice.</div>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+<div>
+<h4 class="text-[16px] font-bold text-on-surface mb-3">Where the money goes</h4>
+<div class="glass-card rounded-xl p-5 space-y-4" id="finance-categories"></div>
+</div>
+<div>
+<h4 class="text-[16px] font-bold text-on-surface mb-3">Cash outlook</h4>
+<div class="grid grid-cols-3 gap-3 mb-3" id="finance-outlook-windows"></div>
+<div class="glass-card rounded-xl divide-y divide-outline-variant max-h-[320px] overflow-y-auto custom-scrollbar" id="finance-upcoming"></div>
+<div class="text-[11px] text-on-surface-variant mt-2" id="finance-retainer-note"></div>
+</div>
+</div>
+<h4 class="text-[16px] font-bold text-on-surface mb-3">Payroll &amp; freelancer ledger</h4>
+<div class="glass-card rounded-xl divide-y divide-outline-variant" id="finance-ledger"></div>
+</div>
 <!-- Projections View -->
 <div class="view-panel hidden" id="view-projections">
 <div class="glass-card rounded-xl p-8 flex items-center justify-center text-on-surface-variant text-[13px] text-center h-64">
@@ -853,6 +909,7 @@ retainers: { eyebrow: 'Clients & Work', title: 'Retainers', primary: 'New Retain
 proposals: { eyebrow: 'Clients & Work', title: 'Proposals', primary: 'New Proposal', secondary: 'Export', onShow: loadProposals },
 invoices: { eyebrow: 'Money', title: 'Invoices', primary: 'New Invoice', secondary: 'Export', onShow: loadInvoices },
 expenses: { eyebrow: 'Money', title: 'Expenses', primary: 'New Expense', secondary: 'Export', onShow: loadExpenses },
+finance: { eyebrow: 'Money', title: 'Finance', primary: 'New Payment', secondary: 'Export', onShow: loadFinance },
 subscriptions: { eyebrow: 'Money', title: 'Subscriptions', primary: 'New Subscription', secondary: 'Export', onShow: loadSubscriptions },
 projections: { eyebrow: 'Plan', title: 'Projections', primary: 'New Scenario', secondary: 'Export' },
 reports: { eyebrow: 'Plan', title: 'Reports', primary: 'New Report', secondary: 'Export' },
@@ -1462,6 +1519,157 @@ showSubscriptionsBanner('Could not reach the Subscriptions backend: ' + err.mess
 });
 }
 
+// ---- Finance (P&L, cost breakdown, cash outlook, payroll ledger) ----
+var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function monthLabel(key) {
+var p = String(key).split('-');
+return MONTH_NAMES[Number(p[1]) - 1] + ' ' + p[0];
+}
+
+function signedMoney(n) {
+return (n < 0 ? '-' : '') + formatMoney(Math.abs(n));
+}
+
+function showFinanceBanner(text) {
+document.getElementById('finance-banner-text').textContent = text;
+document.getElementById('finance-banner').classList.remove('hidden');
+}
+
+function pnlTableHtml(pnl, totals) {
+var cols = [['income', 'Income'], ['salaries', 'Salaries'], ['freelancers', 'Freelancers'], ['bonuses', 'Bonuses'], ['expenses', 'Expenses'], ['subscriptions', 'Subscriptions'], ['net', 'Net']];
+var head = '<tr class="text-left"><th class="p-3 font-label-caps text-[10px] text-on-surface-variant uppercase">Month</th>' +
+cols.map(function(c) { return '<th class="p-3 text-right font-label-caps text-[10px] text-on-surface-variant uppercase">' + c[1] + '</th>'; }).join('') + '</tr>';
+function cell(key, val) {
+var color = key === 'net' ? (val < 0 ? ' text-red-400' : ' text-green-400') : '';
+return '<td class="p-3 text-right text-[13px] font-medium' + color + '">' + (key === 'net' ? signedMoney(val) : formatMoney(val)) + '</td>';
+}
+var body = pnl.map(function(r) {
+return '<tr class="border-t border-outline-variant"><td class="p-3 text-[13px] text-on-surface font-medium whitespace-nowrap">' + escapeHtml(monthLabel(r.month)) + '</td>' +
+cols.map(function(c) { return cell(c[0], r[c[0]]); }).join('') + '</tr>';
+}).join('');
+var foot = '<tr class="border-t-2 border-outline-variant bg-surface-container-high"><td class="p-3 text-[13px] font-bold text-on-surface">Total</td>' +
+cols.map(function(c) { return cell(c[0], totals[c[0]]).replace('font-medium', 'font-bold'); }).join('') + '</tr>';
+return '<table class="w-full min-w-[640px]"><thead>' + head + '</thead><tbody>' + body + foot + '</tbody></table>';
+}
+
+function categoriesHtml(categories) {
+if (!categories.length) return '<div class="text-[13px] text-on-surface-variant text-center">No costs in this period yet.</div>';
+return categories.map(function(c) {
+return '<div>' +
+'<div class="flex items-center justify-between text-[13px] mb-1"><span class="text-on-surface">' + escapeHtml(c.label) + '</span><span class="text-on-surface-variant">' + formatMoney(c.amount) + ' &middot; ' + c.share + '%</span></div>' +
+'<div class="h-2 rounded-full bg-surface-container-highest overflow-hidden"><div class="h-2 rounded-full bg-primary-fixed" style="width:' + Math.min(100, Math.max(0, c.share)) + '%"></div></div>' +
+'</div>';
+}).join('');
+}
+
+function outlookWindowsHtml(windows) {
+return windows.map(function(w) {
+var color = w.net < 0 ? 'text-red-400' : 'text-green-400';
+return '<div class="glass-card rounded-xl p-4">' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-1">Next ' + w.days + ' days</div>' +
+'<div class="font-bold text-[16px] ' + color + '">' + signedMoney(w.net) + '</div>' +
+'<div class="text-[11px] text-on-surface-variant">in ' + formatMoney(w.receivable) + '<br>out ' + formatMoney(w.payable) + '</div>' +
+'</div>';
+}).join('');
+}
+
+function upcomingRowHtml(u) {
+var incoming = u.direction === 'in';
+return '<div class="p-3 flex items-center justify-between gap-3">' +
+'<div class="min-w-0"><div class="text-[13px] text-on-surface truncate">' + escapeHtml(u.label) + '</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(u.date) + (u.overdue ? ' &middot; <span class="text-red-400">OVERDUE</span>' : '') + '</div></div>' +
+'<div class="text-[13px] font-bold shrink-0 ' + (incoming ? 'text-green-400' : 'text-on-surface') + '">' + (incoming ? '+' : '-') + formatMoney(u.amount) + '</div>' +
+'</div>';
+}
+
+function ledgerRowHtml(p) {
+var paid = p.status === 'paid';
+var chip = paid ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400';
+var link = safeLinkHtml(p.fileUrl, 'View file');
+return '<div class="p-4 flex items-center justify-between gap-4">' +
+'<div class="flex-1 min-w-0">' +
+'<div class="font-bold text-on-surface text-[14px] truncate">' + escapeHtml(p.payeeName) + '</div>' +
+'<div class="text-[12px] text-on-surface-variant truncate">' + escapeHtml(p.payeeType) + (p.role ? ' &middot; ' + escapeHtml(p.role) : '') + ' &middot; ' + escapeHtml(monthLabel(p.periodMonth.slice(0, 7))) + (link ? ' &middot; ' + link : '') + '</div>' +
+'</div>' +
+'<div class="text-right shrink-0">' +
+'<div class="font-bold text-on-surface text-[14px]">' + formatMoney(p.amount) + '</div>' +
+'<div class="font-label-caps text-[10px] text-on-surface-variant">' + (paid && p.payDate ? 'paid ' + escapeHtml(p.payDate) : '') + '</div>' +
+'</div>' +
+'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] shrink-0 ' + chip + '">' + escapeHtml(p.status.toUpperCase()) + '</span>' +
+(paid ? '' : '<button class="px-3 py-1 border border-outline-variant rounded-full text-on-surface font-label-caps text-[10px] hover:bg-surface-container-highest transition-all shrink-0" data-pay-id="' + escapeHtml(p.id) + '" type="button">Mark paid</button>') +
+'</div>';
+}
+
+function renderFinance(d) {
+var net = d.totals.net;
+var netEl = document.getElementById('finance-stat-net');
+netEl.textContent = signedMoney(net);
+netEl.className = 'font-display-lg text-[28px] ' + (net < 0 ? 'text-red-400' : 'text-on-surface');
+document.getElementById('finance-stat-income').textContent = formatMoney(d.totals.income);
+document.getElementById('finance-stat-costs').textContent = formatMoney(d.totals.totalCosts);
+document.getElementById('finance-stat-pending').textContent = formatMoney(d.ledger.pendingTotal);
+document.getElementById('finance-pnl').innerHTML = pnlTableHtml(d.pnl, d.totals);
+document.getElementById('finance-categories').innerHTML = categoriesHtml(d.categories);
+document.getElementById('finance-outlook-windows').innerHTML = outlookWindowsHtml(d.outlook.windows);
+document.getElementById('finance-upcoming').innerHTML = d.outlook.upcoming.length ? d.outlook.upcoming.map(upcomingRowHtml).join('') : '<div class="p-5 text-[13px] text-on-surface-variant text-center">Nothing due in the next 90 days.</div>';
+document.getElementById('finance-retainer-note').textContent = d.outlook.retainerMonthly ? 'Active retainers bill about ' + formatMoney(d.outlook.retainerMonthly) + ' a month. That money enters the outlook once its invoice is sent.' : '';
+document.getElementById('finance-ledger').innerHTML = d.ledger.payments.length ? d.ledger.payments.map(ledgerRowHtml).join('') : '<div class="p-6 text-[13px] text-on-surface-variant text-center">No team payments yet. Use "New Payment" to add a salary or freelancer.</div>';
+}
+
+function loadFinance() {
+var months = document.getElementById('finance-months').value;
+return fetch(API_BASE + '/finance?months=' + encodeURIComponent(months))
+.then(function(res) { return res.json(); })
+.then(function(result) {
+if (result.status === 'not_connected') {
+showFinanceBanner(result.reason || 'Finance database is not connected yet.');
+return;
+}
+if (result.status !== 'ok') {
+showFinanceBanner('Could not load finance: ' + (result.message || 'unknown error'));
+return;
+}
+document.getElementById('finance-banner').classList.add('hidden');
+renderFinance(result.data);
+})
+.catch(function(err) {
+showFinanceBanner('Could not reach the Finance backend: ' + err.message);
+});
+}
+
+function financePost(path, method, body) {
+return fetch(API_BASE + path, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+.then(function(res) { return res.json(); });
+}
+
+document.getElementById('finance-months').addEventListener('change', loadFinance);
+
+document.getElementById('finance-ledger').addEventListener('click', function(e) {
+var btn = e.target.closest('[data-pay-id]');
+if (!btn) return;
+btn.disabled = true;
+financePost('/finance?id=' + encodeURIComponent(btn.getAttribute('data-pay-id')), 'PATCH', { status: 'paid' })
+.then(function(result) {
+if (result.status !== 'ok') { showFinanceBanner('Could not mark as paid: ' + (result.message || result.reason || 'unknown error')); btn.disabled = false; return; }
+loadFinance();
+})
+.catch(function(err) { showFinanceBanner('Could not reach the Finance backend: ' + err.message); btn.disabled = false; });
+});
+
+document.getElementById('finance-copy-salaries').addEventListener('click', function() {
+var now = new Date();
+var to = now.toISOString().slice(0, 7);
+var prev = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1)).toISOString().slice(0, 7);
+financePost('/finance', 'POST', { action: 'copySalaries', from: prev, to: to })
+.then(function(result) {
+if (result.status !== 'ok') { showFinanceBanner('Could not copy salaries: ' + (result.message || result.reason || 'unknown error')); return; }
+showFinanceBanner('Copied ' + result.data.created.length + ' salary row(s) from ' + monthLabel(prev) + ' to ' + monthLabel(to) + (result.data.skipped ? ' (' + result.data.skipped + ' already there).' : '.'));
+loadFinance().then(function() { document.getElementById('finance-banner').classList.remove('hidden'); });
+})
+.catch(function(err) { showFinanceBanner('Could not reach the Finance backend: ' + err.message); });
+});
+
 // ---- Entry forms (New Retainer / Proposal / Invoice / Expense / Subscription) ----
 function todayStr() { return new Date().toISOString().slice(0, 10); }
 
@@ -1513,6 +1721,20 @@ fields: [
 { name: 'amount', label: 'Amount (EGP)', type: 'number', required: true },
 { name: 'expenseDate', label: 'Date', type: 'date', required: true, value: todayStr },
 { name: 'fileUrl', label: 'Receipt link (Dropbox)', type: 'url' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+finance: {
+title: 'New Payment', endpoint: '/finance', reload: loadFinance,
+fields: [
+{ name: 'payeeName', label: 'Name', type: 'text', required: true },
+{ name: 'payeeType', label: 'Type', type: 'select', options: ['salary', 'freelancer', 'bonus'], value: 'salary' },
+{ name: 'role', label: 'Role', type: 'text' },
+{ name: 'amount', label: 'Amount (EGP)', type: 'number', required: true },
+{ name: 'periodMonth', label: 'For month', type: 'month', required: true, value: function() { return todayStr().slice(0, 7); } },
+{ name: 'status', label: 'Status', type: 'select', options: ['pending', 'paid'], value: 'pending' },
+{ name: 'payDate', label: 'Paid on', type: 'date' },
+{ name: 'fileUrl', label: 'Payslip / invoice link (Dropbox)', type: 'url' },
 { name: 'notes', label: 'Notes', type: 'textarea' }
 ]
 },
