@@ -182,6 +182,9 @@ CREATE INDEX team_payments_status_idx ON team_payments (status);
 ```
 `GET /api/finance?months=6` returns the monthly P&L, cost breakdown, 30/60/90-day cash outlook, and the ledger. Income is cash (invoices marked paid, in the month paid). Team costs count in the month they are for, expenses by date, and subscriptions at today's monthly run-rate. `POST /api/finance` adds a payment (or copies last month's salaries with `{ "action": "copySalaries", "from": "2026-09", "to": "2026-10" }`), and `PATCH /api/finance?id=...` updates one, for example marking it paid.
 
+## Sign-in (owner password)
+The whole API is locked except `GET /api/health`. One shared owner password lives in the Vercel environment variable `APP_PASSWORD` (set in the Vercel dashboard, never in code or chat). The app signs in with `POST /api/health` `{ "password": "..." }`, which returns a signed token valid for 7 days; every other call must send `Authorization: Bearer <token>` or gets `401 { "status": "error", "code": "unauthorized" }`. `lib/auth.js` holds the helpers and a `withAuth()` wrapper that every endpoint file uses. If `APP_PASSWORD` is missing, protected endpoints answer 503 instead of opening up. Changing `APP_PASSWORD` and redeploying signs everyone out. The token is kept in the browser's `localStorage`, and "Sign out" in the header clears it. Wrong passwords wait about 0.6 seconds before answering. Per-person accounts and roles are the next step.
+
 ## Hosting note: Vercel Hobby allows 12 API files
 `api/` is at that limit (the Google Drive status endpoint was removed to make room for `api/finance.js`). New endpoints should extend an existing file (as Finance does for team payments) or wait for a plan upgrade.
 
@@ -202,5 +205,6 @@ Invoices, expense receipts, contracts, proposals, and reports are created by han
 5. ✅ Dropbox link field on Invoices and Expenses (stored in `drive_file_url`; rows show a "View file" / "View receipt" link).
 6. ⏳ Computed Projections view, using retainer recurring revenue plus the Sales pipeline and the other Money tables.
 7. ✅ Entry forms: the "New …" button on Retainers, Proposals, Invoices, Expenses, and Subscriptions opens a modal that POSTs to the matching endpoint. Editing existing rows (for example marking an invoice paid) is not built yet; the PATCH endpoints exist.
-8. ✅ Finance page with payroll and freelancer ledger (`team_payments`, `lib/money-team.js`, `lib/money-finance.js`, `api/finance.js`). It stores salary data behind an open API, so login comes next.
-9. ⏳ Auth and team roles, then the agency brain (pgvector knowledge base, same Postgres) last.
+8. ✅ Finance page with payroll and freelancer ledger (`team_payments`, `lib/money-team.js`, `lib/money-finance.js`, `api/finance.js`). It stores salary data, which is why login came right after.
+9. ✅ Owner password login locks the whole API (see Sign-in above).
+10. ⏳ Team accounts and roles, then the agency brain (pgvector knowledge base, same Postgres) last.
