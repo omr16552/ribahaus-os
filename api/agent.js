@@ -1,3 +1,4 @@
+const { withAuth } = require('../lib/auth');
 const { getNotionStatus, listDriveFolder, listCalendarEvents } = require('../lib/agent-tools');
 
 const DEFAULT_MODEL = 'claude-sonnet-5';
@@ -57,7 +58,7 @@ async function executeTool(name, input) {
     return { error: 'Unknown tool: ' + name };
 }
 
-module.exports = async (req, res) => {
+module.exports = withAuth(async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://omr16552.github.io');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -156,4 +157,4 @@ module.exports = async (req, res) => {
     } catch (err) {
           res.status(500).json({ status: 'error', message: err.message, details: err.details || null });
     }
-};
+});
