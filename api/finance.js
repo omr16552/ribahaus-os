@@ -1,3 +1,4 @@
+const { withAuth } = require('../lib/auth');
 // Finance API. One function (the project is at Vercel's Hobby function count) serving:
 //   GET   /api/finance?months=6      -> P&L, cost breakdown, cash outlook, payroll ledger
 //   POST  /api/finance               -> add a team payment, or { action: 'copySalaries', from, to }
@@ -5,7 +6,7 @@
 const { getFinance } = require('../lib/money-finance');
 const { createTeamPayment, updateTeamPayment, copySalaries } = require('../lib/money-team');
 
-module.exports = async (req, res) => {
+module.exports = withAuth(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://omr16552.github.io');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -55,4 +56,4 @@ module.exports = async (req, res) => {
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }
-};
+});
