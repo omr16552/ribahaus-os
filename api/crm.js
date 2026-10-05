@@ -1,6 +1,7 @@
+const { withAuth } = require('../lib/auth');
 const { getSalesCRM } = require('../lib/notion-crm');
 
-module.exports = async (req, res) => {
+module.exports = withAuth(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://omr16552.github.io');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -17,4 +18,4 @@ module.exports = async (req, res) => {
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }
-};
+});
