@@ -228,6 +228,9 @@ border-radius: 10px;
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="projects" href="#">
 <span class="material-symbols-outlined">account_tree</span> Projects
 </a>
+<a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="tasks" href="#">
+<span class="material-symbols-outlined">task_alt</span> Tasks
+</a>
 <a class="sidebar-nav-link flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-6 py-3 transition-colors font-label-caps text-label-caps" data-view="retainers" href="#">
 <span class="material-symbols-outlined">event_repeat</span> Retainers
 </a>
@@ -439,8 +442,46 @@ border-radius: 10px;
 <span id="projects-banner-text">Loading projects…</span>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-10" id="projects-board"></div>
-<h4 class="text-[16px] font-bold text-on-surface mb-4">Delivery board <span class="text-on-surface-variant font-normal text-[12px]">(example data — Central Tasks is empty in Notion)</span></h4>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="workflows-board"></div>
+</div>
+<!-- Tasks View (Notion dashboard) -->
+<div class="view-panel hidden" id="view-tasks">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="tasks-stats">
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Open</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="tasks-stat-open">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">In progress</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="tasks-stat-progress">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Overdue</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="tasks-stat-overdue">--</div>
+</div>
+<div class="glass-card rounded-xl p-5">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase mb-2">Due in 7 days</div>
+<div class="font-display-lg text-[28px] text-on-surface" id="tasks-stat-soon">--</div>
+</div>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-4 border border-primary-fixed/30 text-[13px] text-on-surface-variant flex items-start gap-3" id="tasks-banner">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<span id="tasks-banner-text"></span>
+</div>
+<div class="hidden mb-6 glass-card rounded-xl p-5" id="tasks-sources-panel">
+<div class="flex items-start justify-between gap-4 mb-3">
+<div><div class="font-bold text-on-surface text-[15px]">Where should tasks come from?</div>
+<div class="text-[12px] text-on-surface-variant mt-1">Pick up to 5 Notion databases. Only databases shared with the RibaHaus OS integration appear here. To add one, open it in Notion, click &quot;...&quot; &gt; Connections, and add &quot;RibaHaus OS &mdash; Reader&quot;.</div></div>
+<button class="text-on-surface-variant hover:text-on-surface p-1" id="tasks-sources-close" type="button"><span class="material-symbols-outlined text-[20px]">close</span></button>
+</div>
+<input class="w-full bg-surface-container-highest border-none rounded-lg px-3 py-2 text-[13px] text-on-surface placeholder:text-on-surface-variant mb-3" id="tasks-sources-filter" placeholder="Filter databases..." type="text"/>
+<div class="max-h-[260px] overflow-y-auto custom-scrollbar divide-y divide-outline-variant rounded-lg border border-outline-variant" id="tasks-sources-list"></div>
+<div class="flex items-center justify-between mt-4">
+<div class="text-[12px] text-on-surface-variant" id="tasks-sources-msg"></div>
+<button class="px-4 py-2 bg-primary-fixed text-white font-bold rounded-full text-label-caps hover:bg-primary-container transition-all disabled:opacity-50" id="tasks-sources-save" type="button">Save sources</button>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-2 mb-6" id="tasks-source-chips"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="tasks-board"></div>
 </div>
 <!-- Retainers View -->
 <div class="view-panel hidden" id="view-retainers">
@@ -1009,9 +1050,10 @@ return 'EGP ' + Math.round(n).toLocaleString('en-US');
 
 var VIEWS = {
 overview: { eyebrow: 'Agency OS v2.0', title: 'Home', primary: 'New Project', secondary: 'Export Report', onShow: loadHome },
-sales: { eyebrow: 'Clients & Work', title: 'Sales', primary: 'Add Lead', secondary: 'Sync Notion', onShow: loadSales },
-clients: { eyebrow: 'Clients & Work', title: 'Clients', primary: 'Add Client', secondary: 'Sync Notion', onShow: loadClients },
-projects: { eyebrow: 'Clients & Work', title: 'Projects', primary: 'New Project', secondary: 'Filter', onShow: loadProjects },
+sales: { eyebrow: 'Clients & Work', title: 'Sales', primary: 'Add Lead', secondary: 'Refresh', onShow: loadSales },
+clients: { eyebrow: 'Clients & Work', title: 'Clients', primary: 'Add Client', secondary: 'Refresh', onShow: loadClients },
+projects: { eyebrow: 'Clients & Work', title: 'Projects', primary: 'New Project', secondary: 'Refresh', onShow: loadProjects },
+tasks: { eyebrow: 'Clients & Work', title: 'Tasks', primary: 'Choose Sources', secondary: 'Refresh', onShow: loadTasks },
 retainers: { eyebrow: 'Clients & Work', title: 'Retainers', primary: 'New Retainer', secondary: 'Export', onShow: loadRetainers },
 proposals: { eyebrow: 'Clients & Work', title: 'Proposals', primary: 'New Proposal', secondary: 'Export', onShow: loadProposals },
 invoices: { eyebrow: 'Money', title: 'Invoices', primary: 'New Invoice', secondary: 'Export', onShow: loadInvoices },
@@ -1091,7 +1133,7 @@ fetch(API_BASE + '/crm')
 .then(function(result) {
 if (result.status !== 'ok') {
 document.getElementById('home-hero-headline').textContent = 'Sales CRM not connected';
-document.getElementById('home-hero-subline').textContent = result.reason || result.message || 'Check the Notion connection.';
+document.getElementById('home-hero-subline').textContent = result.reason || result.message || 'Check the database connection.';
 return;
 }
 var stats = result.data.stats;
@@ -1133,7 +1175,7 @@ return '<div class="glass-card rounded-xl p-4 hover:border-primary-fixed transit
 '<div class="font-bold text-on-surface mb-1">' + escapeHtml(p.name) + '</div>' +
 '<div class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(p.status || 'No status') + (p.dueDate ? ' &middot; due ' + escapeHtml(p.dueDate) : '') + '</div>' +
 '</div>';
-}).join('') : '<div class="text-[12px] text-on-surface-variant">No projects yet — add one in the new Projects database in Notion.</div>';
+}).join('') : '<div class="text-[12px] text-on-surface-variant">No projects yet. Open Projects and use New Project.</div>';
 })
 .catch(function() {
 document.getElementById('home-projects-list').innerHTML = '<div class="text-[12px] text-on-surface-variant">Could not reach the Projects backend.</div>';
@@ -1151,7 +1193,7 @@ var SALES_COLUMNS = [
 function dealCardHtml(row) {
 var priorityColor = row.priority === 'High' ? 'bg-red-500/10 text-red-400' : row.priority === 'Medium' ? 'bg-orange-500/10 text-orange-400' : 'bg-surface-container-highest text-on-surface-variant';
 return '' +
-'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer" data-deal-id="' + escapeHtml(row.id) + '">' +
 '<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(row.name) + '</div>' +
 (row.company ? '<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(row.company) + '</div>' : '<div class="mb-3"></div>') +
 '<div class="flex flex-wrap items-center gap-2">' +
@@ -1180,7 +1222,7 @@ return '' +
 var lost = (pipeline && pipeline.closed_lost) || [];
 document.getElementById('sales-lost-count').textContent = lost.length;
 document.getElementById('sales-lost-list').innerHTML = lost.map(function(row) {
-return '<div class="p-3 flex items-center justify-between text-[13px]">' +
+return '<div class="p-3 flex items-center justify-between text-[13px] cursor-pointer hover:bg-surface-container-high" data-deal-id="' + escapeHtml(row.id) + '">' +
 '<span class="text-on-surface">' + escapeHtml(row.name) + (row.company ? ' <span class="text-on-surface-variant">&middot; ' + escapeHtml(row.company) + '</span>' : '') + '</span>' +
 '<span class="font-label-caps text-[10px] text-on-surface-variant">LOST</span>' +
 '</div>';
@@ -1207,13 +1249,14 @@ fetch(API_BASE + '/crm')
 .then(function(res) { return res.json(); })
 .then(function(result) {
 if (result.status === 'not_connected') {
-showSalesBanner(result.reason || 'Notion Sales CRM is not connected yet.');
+showSalesBanner(result.reason || 'The CRM database is not connected yet.');
 return;
 }
 if (result.status !== 'ok') {
 showSalesBanner('Could not load CRM data: ' + (result.message || 'unknown error'));
 return;
 }
+rememberDeals(result.data);
 renderSalesStats(result.data.stats);
 renderSalesBoard(result.data.salesPipeline);
 })
@@ -1238,7 +1281,7 @@ var CLIENT_COLUMNS = [
 
 function clientCardHtml(row) {
 return '' +
-'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
+'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer" data-deal-id="' + escapeHtml(row.id) + '">' +
 '<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(row.name) + '</div>' +
 (row.company ? '<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(row.company) + '</div>' : '<div class="mb-3"></div>') +
 (row.engagementType ? '<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-caps text-[9px]">' + escapeHtml(row.engagementType).toUpperCase() + '</span>' : '<span class="text-[10px] text-on-surface-variant">Engagement type not set</span>') +
@@ -1280,13 +1323,14 @@ fetch(API_BASE + '/crm')
 .then(function(res) { return res.json(); })
 .then(function(result) {
 if (result.status === 'not_connected') {
-showClientsBanner(result.reason || 'Notion Sales CRM is not connected yet.');
+showClientsBanner(result.reason || 'The CRM database is not connected yet.');
 return;
 }
 if (result.status !== 'ok') {
 showClientsBanner('Could not load client data: ' + (result.message || 'unknown error'));
 return;
 }
+rememberDeals(result.data);
 renderClientsStats(result.data.stats);
 renderClientsBoard(result.data.clients);
 var dormantOffboarded = (result.data.clients.dormant || []).length + (result.data.clients.offboarded || []).length;
@@ -1301,12 +1345,21 @@ showClientsBanner('Could not reach the CRM backend: ' + err.message);
 function projectCardHtml(p) {
 var statusColor = p.status === 'Done' ? 'bg-green-500/10 text-green-400' : p.status === 'On Hold' ? 'bg-red-500/10 text-red-400' : 'bg-surface-container-highest text-on-surface-variant';
 return '' +
-'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer">' +
-'<div class="font-bold text-on-surface text-[14px] mb-2">' + escapeHtml(p.name) + '</div>' +
+'<div class="glass-card rounded-lg p-4 hover:border-primary-fixed transition-colors cursor-pointer" data-project-id="' + escapeHtml(p.id) + '">' +
+'<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(p.name) + '</div>' +
+(p.clientName ? '<div class="text-[12px] text-on-surface-variant mb-2">' + escapeHtml(p.clientName) + (p.owner ? ' &middot; ' + escapeHtml(p.owner) : '') + '</div>' : '<div class="mb-2"></div>') +
 '<div class="flex items-center justify-between">' +
 '<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] ' + statusColor + '">' + escapeHtml((p.status || 'NO STATUS').toUpperCase()) + '</span>' +
 (p.dueDate ? '<span class="font-label-caps text-[10px] text-on-surface-variant">Due ' + escapeHtml(p.dueDate) + '</span>' : '') +
 '</div></div>';
+}
+
+var projectsById = {};
+var dealsById = {};
+function rememberDeals(data) {
+dealsById = {};
+var pipe = data.salesPipeline || {};
+Object.keys(pipe).forEach(function(k) { (pipe[k] || []).forEach(function(r) { dealsById[r.id] = r; }); });
 }
 
 function loadProjects() {
@@ -1317,7 +1370,7 @@ var banner = document.getElementById('projects-banner');
 var bannerText = document.getElementById('projects-banner-text');
 var board = document.getElementById('projects-board');
 if (result.status === 'not_connected') {
-bannerText.textContent = result.reason || 'Projects database is not connected yet.';
+bannerText.textContent = result.reason || 'The Projects database is not connected yet.';
 banner.classList.remove('hidden');
 board.innerHTML = '';
 return;
@@ -1329,18 +1382,19 @@ board.innerHTML = '';
 return;
 }
 if (!result.data.projects.length) {
-bannerText.textContent = 'The new Projects database is set up and connected — it just has no rows yet. Add projects in Notion and they will show up here.';
+bannerText.textContent = 'No projects yet. Use New Project to add the first one.';
 banner.classList.remove('hidden');
 } else {
 banner.classList.add('hidden');
 }
+projectsById = {};
+result.data.projects.forEach(function(p) { projectsById[p.id] = p; });
 board.innerHTML = result.data.projects.map(projectCardHtml).join('');
 })
 .catch(function(err) {
 document.getElementById('projects-banner-text').textContent = 'Could not reach the Projects backend: ' + err.message;
 document.getElementById('projects-banner').classList.remove('hidden');
 });
-renderWorkflows();
 }
 
 // ---- Shared: safe external link (Dropbox shared links) ----
@@ -1845,6 +1899,50 @@ fields: [
 { name: 'notes', label: 'Notes', type: 'textarea' }
 ]
 },
+sales: {
+title: 'Add Lead', editTitle: 'Edit Deal', endpoint: '/crm', reload: loadSales,
+fields: [
+{ name: 'name', label: 'Name', type: 'text', required: true },
+{ name: 'company', label: 'Company', type: 'text' },
+{ name: 'status', label: 'Stage', type: 'select', options: ['DREAM', 'Lead', 'Qualified', 'Proposal', 'Negotiation', 'Closed', 'Lost'], value: 'Lead' },
+{ name: 'priority', label: 'Priority', type: 'select', options: ['', 'Low', 'Medium', 'High'] },
+{ name: 'industry', label: 'Industry', type: 'text' },
+{ name: 'estimatedValue', label: 'Estimated value', type: 'number' },
+{ name: 'expectedClose', label: 'Expected close', type: 'date' },
+{ name: 'engagementType', label: 'Engagement type', type: 'select', options: ['', 'Retainer', 'Project-Based', 'One-Off'] },
+{ name: 'email', label: 'Email', type: 'email' },
+{ name: 'phone', label: 'Phone', type: 'text' },
+{ name: 'socials', label: 'Website or socials', type: 'url', placeholder: 'https://...' },
+{ name: 'leadSource', label: 'Lead source', type: 'text' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+clients: {
+title: 'Add Client', editTitle: 'Edit Client', endpoint: '/crm', reload: loadClients, fixed: { status: 'Closed' },
+fields: [
+{ name: 'name', label: 'Name', type: 'text', required: true },
+{ name: 'company', label: 'Company', type: 'text' },
+{ name: 'clientLifecycle', label: 'Lifecycle', type: 'select', options: ['Onboarding', 'Active', 'Renewal Due', 'Dormant', 'Offboarded'], value: 'Onboarding' },
+{ name: 'engagementType', label: 'Engagement type', type: 'select', options: ['', 'Retainer', 'Project-Based', 'One-Off'] },
+{ name: 'industry', label: 'Industry', type: 'text' },
+{ name: 'estimatedValue', label: 'Value', type: 'number' },
+{ name: 'email', label: 'Email', type: 'email' },
+{ name: 'phone', label: 'Phone', type: 'text' },
+{ name: 'socials', label: 'Website or socials', type: 'url', placeholder: 'https://...' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
+projects: {
+title: 'New Project', editTitle: 'Edit Project', endpoint: '/projects', reload: loadProjects,
+fields: [
+{ name: 'name', label: 'Project name', type: 'text', required: true },
+{ name: 'clientName', label: 'Client (exact name links it)', type: 'text' },
+{ name: 'status', label: 'Status', type: 'select', options: ['Not Started', 'In Progress', 'Review', 'Done', 'On Hold'], value: 'Not Started' },
+{ name: 'owner', label: 'Owner', type: 'text' },
+{ name: 'dueDate', label: 'Due date', type: 'date' },
+{ name: 'notes', label: 'Notes', type: 'textarea' }
+]
+},
 subscriptions: {
 title: 'New Subscription', endpoint: '/subscriptions', reload: loadSubscriptions,
 fields: [
@@ -1860,13 +1958,15 @@ fields: [
 };
 
 var activeForm = null;
+var activeRecord = null;
 var INPUT_CLASS = 'w-full bg-surface-container-highest border-none rounded-lg px-3 py-2 text-[13px] text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary-fixed';
 
-function openEntryForm(viewName) {
+function openEntryForm(viewName, record) {
 var cfg = FORMS[viewName];
 if (!cfg) return;
 activeForm = viewName;
-document.getElementById('entry-modal-title').textContent = cfg.title;
+activeRecord = record || null;
+document.getElementById('entry-modal-title').textContent = (record && cfg.editTitle) ? cfg.editTitle : cfg.title;
 var wrap = document.getElementById('entry-fields');
 wrap.innerHTML = '';
 cfg.fields.forEach(function(f) {
@@ -1879,7 +1979,7 @@ caption.textContent = f.label + (f.required ? ' *' : '');
 var input;
 if (f.type === 'select') {
 input = document.createElement('select');
-f.options.forEach(function(o) { var opt = document.createElement('option'); opt.value = o; opt.textContent = o; input.appendChild(opt); });
+f.options.forEach(function(o) { var opt = document.createElement('option'); opt.value = o; opt.textContent = o === '' ? '-- none --' : o; input.appendChild(opt); });
 } else if (f.type === 'textarea') {
 input = document.createElement('textarea');
 input.rows = 3;
@@ -1887,12 +1987,15 @@ input.rows = 3;
 input = document.createElement('input');
 input.type = f.type;
 if (f.type === 'number') { input.step = '0.01'; input.min = '0'; }
-if (f.type === 'url') input.placeholder = 'https://www.dropbox.com/...';
+if (f.type === 'url') input.placeholder = f.placeholder || 'https://www.dropbox.com/...';
 }
 input.name = f.name;
 if (f.type !== 'checkbox') input.className = INPUT_CLASS;
 var def = typeof f.value === 'function' ? f.value() : f.value;
+if (record && record[f.name] !== undefined && record[f.name] !== null) def = record[f.name];
+if (f.type === 'select' && def !== undefined && def !== '' && Array.prototype.every.call(input.options, function(o) { return o.value !== String(def); })) { var extra = document.createElement('option'); extra.value = def; extra.textContent = def; input.appendChild(extra); }
 if (def !== undefined && f.type !== 'checkbox') input.value = def;
+if (f.type === 'checkbox' && record && record[f.name]) input.checked = true;
 if (f.type === 'checkbox') { label.appendChild(input); label.appendChild(caption); }
 else { label.appendChild(caption); label.appendChild(input); }
 row.appendChild(label);
@@ -1910,6 +2013,7 @@ function closeEntryForm() {
 document.getElementById('entry-modal').classList.add('hidden');
 document.getElementById('entry-modal').classList.remove('flex');
 activeForm = null;
+activeRecord = null;
 }
 
 function showEntryError(msg) {
@@ -1931,6 +2035,7 @@ if (f.type === 'checkbox') { body[f.name] = el.checked; continue; }
 var raw = (el.value || '').trim();
 if (!raw) {
 if (f.required) { showEntryError(f.label + ' is required.'); el.focus(); return; }
+if (activeRecord) body[f.name] = '';
 continue;
 }
 if (f.type === 'number') {
@@ -1944,11 +2049,12 @@ body[f.name] = raw;
 body[f.name] = raw;
 }
 }
+if (!activeRecord && cfg.fixed) Object.keys(cfg.fixed).forEach(function(k) { body[k] = cfg.fixed[k]; });
 var submitBtn = document.getElementById('entry-submit');
 submitBtn.disabled = true;
 document.getElementById('entry-error').classList.add('hidden');
-fetch(API_BASE + cfg.endpoint, {
-method: 'POST',
+fetch(API_BASE + cfg.endpoint + (activeRecord ? '?id=' + encodeURIComponent(activeRecord.id) : ''), {
+method: activeRecord ? 'PATCH' : 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify(body)
 })
@@ -1965,57 +2071,192 @@ submitBtn.disabled = false;
 });
 }
 
-document.getElementById('page-action-primary').addEventListener('click', function() { openEntryForm(currentView); });
+document.getElementById('page-action-primary').addEventListener('click', function() {
+if (currentView === 'tasks') { toggleTasksSources(); return; }
+openEntryForm(currentView);
+});
+document.getElementById('page-action-secondary').addEventListener('click', function() {
+var cfg = VIEWS[currentView];
+if (cfg && cfg.secondary === 'Refresh' && cfg.onShow) cfg.onShow();
+});
+function cardClick(boardId, attr, getRecord, formFor) {
+var el = document.getElementById(boardId);
+if (!el) return;
+el.addEventListener('click', function(e) {
+var card = e.target.closest('[' + attr + ']');
+if (!card) return;
+var rec = getRecord(card.getAttribute(attr));
+if (rec) openEntryForm(formFor(), rec);
+});
+}
+cardClick('sales-board', 'data-deal-id', function(id) { return dealsById[id]; }, function() { return 'sales'; });
+cardClick('sales-lost-list', 'data-deal-id', function(id) { return dealsById[id]; }, function() { return 'sales'; });
+cardClick('clients-board', 'data-deal-id', function(id) { return dealsById[id]; }, function() { return 'clients'; });
+cardClick('projects-board', 'data-project-id', function(id) { return projectsById[id]; }, function() { return 'projects'; });
 document.getElementById('entry-form').addEventListener('submit', submitEntryForm);
 document.getElementById('entry-modal-close').addEventListener('click', closeEntryForm);
 document.getElementById('entry-cancel').addEventListener('click', closeEntryForm);
 document.getElementById('entry-modal').addEventListener('click', function(e) { if (e.target === this) closeEntryForm(); });
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && activeForm) closeEntryForm(); });
 
-// ---- Workflows / Delivery board (placeholder demo data — Central Tasks is empty in Notion) ----
-var DEMO_TASKS = [
-{ name: 'Draft Q4 content calendar', client: 'Gray labelled', status: 'Not started', priority: 'High', workArea: 'Strategy & Planning', assignee: 'OM', due: 'Oct 2' },
-{ name: 'Rebrand moodboard v3', client: 'Sevenyears | Rebrand', status: 'In progress', priority: 'Medium', workArea: 'Design & Creative', assignee: 'AL', due: 'Oct 4' },
-{ name: 'Pharmacy launch reels', client: 'Romany Pharamcy', status: 'In progress', priority: 'High', workArea: 'Content Creation', assignee: 'MK', due: 'Oct 5' },
-{ name: 'Renewal check-in call', client: 'Palma', status: 'Not started', priority: 'Medium', workArea: 'Client Management', assignee: 'OM', due: 'Oct 6' },
-{ name: 'Invoice reconciliation', client: 'Internal', status: 'Done', priority: 'Low', workArea: 'Admin', assignee: 'OM', due: 'Sep 30' },
-{ name: 'Cakestay product shoot edit', client: 'Cakestay', status: 'In progress', priority: 'Medium', workArea: 'Design & Creative', assignee: 'AL', due: 'Oct 8' },
-{ name: 'Genetics content strategy deck', client: 'Generation Genetics', status: 'Done', priority: 'High', workArea: 'Strategy & Planning', assignee: 'OM', due: 'Sep 28' }
+// ---- Tasks (Notion dashboard) ----
+var TASK_COLUMNS = [
+{ key: 'todo', label: 'To do', dot: 'bg-pink-400' },
+{ key: 'in_progress', label: 'In progress', dot: 'bg-blue-400' },
+{ key: 'done', label: 'Done', dot: 'bg-green-400' }
 ];
+var tasksState = { sources: [], selected: [] };
 
-function taskCardHtml(t) {
-var priorityColor = t.priority === 'High' ? 'bg-red-500/10 text-red-400' : t.priority === 'Medium' ? 'bg-orange-500/10 text-orange-400' : 'bg-surface-container-highest text-on-surface-variant';
-return '' +
-'<div class="glass-card rounded-lg p-4">' +
-'<div class="font-bold text-on-surface text-[14px] mb-1">' + escapeHtml(t.name) + '</div>' +
-'<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(t.client) + ' &middot; ' + escapeHtml(t.workArea) + '</div>' +
-'<div class="flex items-center justify-between">' +
-'<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] ' + priorityColor + '">' + t.priority.toUpperCase() + '</span>' +
-'<div class="flex items-center gap-2">' +
-'<span class="font-label-caps text-[9px] text-on-surface-variant">' + t.due + '</span>' +
-'<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[9px] font-bold text-on-surface">' + t.assignee + '</div>' +
-'</div></div></div>';
+function initials(name) {
+var parts = String(name || '?').trim().split(/\s+/);
+return ((parts[0] || '?').charAt(0) + (parts.length > 1 ? parts[parts.length - 1].charAt(0) : '')).toUpperCase();
 }
 
-function renderWorkflows() {
-var cols = [
-{ key: 'Not started', label: 'Not Started' },
-{ key: 'In progress', label: 'In Progress' },
-{ key: 'Done', label: 'Done' }
-];
-var board = document.getElementById('workflows-board');
-board.innerHTML = cols.map(function(col) {
-var tasks = DEMO_TASKS.filter(function(t) { return t.status === col.key; });
+function notionTaskCardHtml(t) {
+var priorityColor = t.priority === 'High' ? 'bg-red-500/10 text-red-400' : t.priority === 'Medium' ? 'bg-orange-500/10 text-orange-400' : 'bg-surface-container-highest text-on-surface-variant';
+var title = t.url ? '<a href="' + escapeHtml(t.url) + '" target="_blank" rel="noopener noreferrer" class="hover:text-primary-fixed">' + escapeHtml(t.name) + '</a>' : escapeHtml(t.name);
+return '' +
+'<div class="glass-card rounded-lg p-4' + (t.overdue ? ' border border-red-500/40' : '') + '">' +
+'<div class="font-bold text-on-surface text-[14px] mb-1">' + title + '</div>' +
+'<div class="text-[12px] text-on-surface-variant mb-3">' + escapeHtml(t.source ? t.source.title : '') + (t.status ? ' &middot; ' + escapeHtml(t.status) : '') + '</div>' +
+'<div class="flex items-center justify-between gap-2">' +
+'<div class="flex items-center gap-2">' +
+(t.priority ? '<span class="px-2 py-0.5 rounded-full font-label-caps text-[9px] ' + priorityColor + '">' + escapeHtml(t.priority).toUpperCase() + '</span>' : '') +
+(t.due ? '<span class="font-label-caps text-[10px] ' + (t.overdue ? 'text-red-400' : 'text-on-surface-variant') + '">' + (t.overdue ? 'Overdue ' : 'Due ') + escapeHtml(t.due.slice(0, 10)) + '</span>' : '') +
+'</div>' +
+'<div class="flex items-center -space-x-1">' + (t.assignees || []).slice(0, 3).map(function(n) { return '<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-[9px] font-bold text-on-surface" title="' + escapeHtml(n) + '">' + escapeHtml(initials(n)) + '</div>'; }).join('') + '</div>' +
+'</div></div>';
+}
+
+function showTasksBanner(text) {
+var banner = document.getElementById('tasks-banner');
+if (!text) { banner.classList.add('hidden'); return; }
+document.getElementById('tasks-banner-text').textContent = text;
+banner.classList.remove('hidden');
+}
+
+function renderTasks(data) {
+var stats = data.stats || { open: 0, inProgress: 0, overdue: 0, dueSoon: 0 };
+document.getElementById('tasks-stat-open').textContent = data.stats ? stats.open : '--';
+document.getElementById('tasks-stat-progress').textContent = data.stats ? stats.inProgress : '--';
+document.getElementById('tasks-stat-overdue').textContent = data.stats ? stats.overdue : '--';
+document.getElementById('tasks-stat-soon').textContent = data.stats ? stats.dueSoon : '--';
+document.getElementById('tasks-source-chips').innerHTML = (data.sources || []).map(function(s) {
+return '<span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant font-label-caps text-[10px]">' + escapeHtml(s.title) + ' &middot; ' + s.count + '</span>';
+}).join('');
+var tasks = data.tasks || [];
+document.getElementById('tasks-board').innerHTML = TASK_COLUMNS.map(function(col) {
+var rows = tasks.filter(function(t) { return t.statusGroup === col.key; });
+var shown = rows.slice(0, col.key === 'done' ? 12 : 60);
+var more = rows.length - shown.length;
 return '' +
 '<div class="flex flex-col gap-3">' +
 '<div class="flex items-center justify-between px-1">' +
-'<div class="font-label-caps text-label-caps text-on-surface">' + col.label + '</div>' +
-'<span class="font-label-caps text-[10px] text-on-surface-variant">' + tasks.length + '</span>' +
+'<div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface"><span class="w-2 h-2 rounded-full ' + col.dot + '"></span>' + col.label + '</div>' +
+'<span class="font-label-caps text-[10px] text-on-surface-variant">' + rows.length + '</span>' +
 '</div>' +
-'<div class="flex flex-col gap-3">' + tasks.map(taskCardHtml).join('') + '</div>' +
+'<div class="flex flex-col gap-3">' + (shown.length ? shown.map(notionTaskCardHtml).join('') : '<div class="text-[12px] text-on-surface-variant p-4 text-center">Nothing here</div>') +
+(more > 0 ? '<div class="text-[12px] text-on-surface-variant text-center">+' + more + ' more in Notion</div>' : '') + '</div>' +
 '</div>';
 }).join('');
 }
+
+function loadTasks() {
+document.getElementById('tasks-board').innerHTML = '';
+showTasksBanner('');
+fetch(API_BASE + '/tasks')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+if (result.status === 'not_connected') {
+showTasksBanner(result.reason || 'Notion is not connected yet.');
+renderTasks({});
+return;
+}
+if (result.status !== 'ok') {
+showTasksBanner('Could not load tasks: ' + (result.message || 'unknown error'));
+renderTasks({});
+return;
+}
+var data = result.data;
+renderTasks(data);
+if (data.needsSource) {
+showTasksBanner('Choose which Notion databases to show tasks from.');
+openTasksSources();
+return;
+}
+var errs = (data.errors || []).map(function(e) { return e.message; });
+if (errs.length) showTasksBanner(errs[0] + (errs.length > 1 ? ' (+' + (errs.length - 1) + ' more)' : ''));
+else if (!(data.tasks || []).length) showTasksBanner('The chosen databases have no tasks yet.');
+})
+.catch(function(err) { showTasksBanner('Could not reach the tasks backend: ' + err.message); });
+}
+
+function renderTasksSourceList() {
+var filter = (document.getElementById('tasks-sources-filter').value || '').toLowerCase();
+var list = document.getElementById('tasks-sources-list');
+var rows = tasksState.sources.filter(function(s) { return !filter || s.title.toLowerCase().indexOf(filter) !== -1 || tasksState.selected.indexOf(s.id) !== -1; });
+list.innerHTML = rows.length ? rows.map(function(s) {
+var checked = tasksState.selected.indexOf(s.id) !== -1;
+return '<label class="flex items-center gap-3 px-3 py-2 text-[13px] text-on-surface cursor-pointer hover:bg-surface-container-high">' +
+'<input type="checkbox" data-source-id="' + escapeHtml(s.id) + '"' + (checked ? ' checked' : '') + '/>' +
+'<span class="flex-1">' + escapeHtml(s.title) + '</span>' +
+(s.lastEdited ? '<span class="font-label-caps text-[10px] text-on-surface-variant">' + escapeHtml(s.lastEdited.slice(0, 10)) + '</span>' : '') +
+'</label>';
+}).join('') : '<div class="p-4 text-[12px] text-on-surface-variant">No databases found. Share a Notion database with the RibaHaus OS integration, then reopen this panel.</div>';
+}
+
+function openTasksSources() {
+var panel = document.getElementById('tasks-sources-panel');
+panel.classList.remove('hidden');
+document.getElementById('tasks-sources-msg').textContent = 'Loading databases...';
+fetch(API_BASE + '/tasks?view=sources')
+.then(function(res) { return res.json(); })
+.then(function(result) {
+if (result.status !== 'ok') { document.getElementById('tasks-sources-msg').textContent = result.reason || result.message || 'Could not load databases.'; return; }
+tasksState.sources = result.data.sources;
+tasksState.selected = result.data.selected || [];
+document.getElementById('tasks-sources-msg').textContent = tasksState.sources.length + ' databases available';
+renderTasksSourceList();
+})
+.catch(function(err) { document.getElementById('tasks-sources-msg').textContent = 'Could not reach the backend: ' + err.message; });
+}
+
+function toggleTasksSources() {
+var panel = document.getElementById('tasks-sources-panel');
+if (panel.classList.contains('hidden')) openTasksSources(); else panel.classList.add('hidden');
+}
+
+document.getElementById('tasks-sources-close').addEventListener('click', function() { document.getElementById('tasks-sources-panel').classList.add('hidden'); });
+document.getElementById('tasks-sources-filter').addEventListener('input', renderTasksSourceList);
+document.getElementById('tasks-sources-list').addEventListener('change', function(e) {
+var id = e.target.getAttribute('data-source-id');
+if (!id) return;
+var idx = tasksState.selected.indexOf(id);
+if (e.target.checked) {
+if (tasksState.selected.length >= 5) { e.target.checked = false; document.getElementById('tasks-sources-msg').textContent = 'You can pick up to 5 sources.'; return; }
+if (idx === -1) tasksState.selected.push(id);
+} else if (idx !== -1) {
+tasksState.selected.splice(idx, 1);
+}
+document.getElementById('tasks-sources-msg').textContent = tasksState.selected.length + ' selected';
+});
+document.getElementById('tasks-sources-save').addEventListener('click', function() {
+var btn = this;
+btn.disabled = true;
+fetch(API_BASE + '/tasks', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ sourceIds: tasksState.selected })
+})
+.then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+.then(function(result) {
+btn.disabled = false;
+if (!result.ok || result.data.status !== 'ok') { document.getElementById('tasks-sources-msg').textContent = 'Could not save: ' + (result.data.message || result.data.reason || 'unknown error'); return; }
+document.getElementById('tasks-sources-panel').classList.add('hidden');
+loadTasks();
+})
+.catch(function(err) { btn.disabled = false; document.getElementById('tasks-sources-msg').textContent = 'Could not reach the backend: ' + err.message; });
+});
 
 // ---- Resources (scaffold) ----
 var RESOURCE_GROUPS = [
