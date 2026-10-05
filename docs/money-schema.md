@@ -1,6 +1,6 @@
 # Money layer schema plan (Postgres, separate from Notion)
 
-Status: **partly applied.** The `ribahaus-money` Postgres database (Vercel Storage → Neon, connected to `ribahaus-os`, connection string `process.env.POSTGRES_URL`) has the Money tables live. Invoices, Expenses, and Subscriptions have live `lib/money-*.js` + `api/*.js` pairs with the `index.html` frontend wired up. **Ad Spend was dropped** from the product (its page is replaced by Retainers and Proposals, below); the `ad_spend` table already exists in the database but is unused and can be dropped. **Retainers and Proposals** are built in code (`lib/money-retainers.js`, `lib/money-proposals.js`, `api/retainers.js`, `api/proposals.js`, frontend views) but their tables are created and live in Neon. **Entry forms** for all five Money and Clients & Work screens are live, and invoices and expenses accept a Dropbox link. The computed Projections view is still pending.
+Status: **partly applied.** The `ribahaus-money` Postgres database (Vercel Storage → Neon, connected to `ribahaus-os`, connection string `process.env.POSTGRES_URL`) has the Money tables live. Invoices, Expenses, and Subscriptions have live `lib/money-*.js` + `api/*.js` pairs with the `index.html` frontend wired up. **Ad Spend was dropped** from the product (its page is replaced by Retainers and Proposals, below); the `ad_spend` table already exists in the database but is unused and can be dropped. **Retainers and Proposals** are built in code (`lib/money-retainers.js`, `lib/money-proposals.js`, `api/retainers.js`, `api/proposals.js`, frontend views) but their tables are created and live in Neon. **Entry forms** for all five Money and Clients & Work screens are live, and invoices and expenses accept a Dropbox link. A **Finance** page (monthly P&L, cost breakdown, cash outlook, payroll and freelancer ledger) is live, backed by the new `team_payments` table. The computed Projections view is still pending.
 
 ## Why a separate store
 
@@ -159,6 +159,32 @@ CREATE INDEX proposals_client_idx ON proposals (client_notion_id);
 ```
 `GET /api/proposals` returns the list plus stats: open count and value (draft + sent), accepted value, and win rate (accepted / accepted + lost).
 
+### `team_payments`
+Salaries, freelancers, and bonuses, one row per payment per month. Feeds the Finance page. `file_url` is a Dropbox shared link (payslip or freelancer invoice). Log payroll and freelancers here rather than as Expenses, so nothing is counted twice.
+```sql
+CREATE TABLE team_payments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  payee_name text NOT NULL,
+  payee_type text NOT NULL DEFAULT 'salary',   -- salary | freelancer | bonus
+  role text,
+  amount numeric(12,2) NOT NULL,
+  currency text NOT NULL DEFAULT 'EGP',
+  period_month date NOT NULL,                  -- first day of the month the payment is for
+  pay_date date,
+  status text NOT NULL DEFAULT 'pending',      -- pending | paid
+  file_url text,
+  notes text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX team_payments_period_idx ON team_payments (period_month);
+CREATE INDEX team_payments_status_idx ON team_payments (status);
+```
+`GET /api/finance?months=6` returns the monthly P&L, cost breakdown, 30/60/90-day cash outlook, and the ledger. Income is cash (invoices marked paid, in the month paid). Team costs count in the month they are for, expenses by date, and subscriptions at today's monthly run-rate. `POST /api/finance` adds a payment (or copies last month's salaries with `{ "action": "copySalaries", "from": "2026-09", "to": "2026-10" }`), and `PATCH /api/finance?id=...` updates one, for example marking it paid.
+
+## Hosting note: Vercel Hobby allows 12 API files
+`api/` is at that limit (the Google Drive status endpoint was removed to make room for `api/finance.js`). New endpoints should extend an existing file (as Finance does for team payments) or wait for a plan upgrade.
+
 ## File storage: Dropbox (links first)
 
 Invoices, expense receipts, contracts, proposals, and reports are created by hand and filed in Dropbox, which has the larger storage. Postgres never holds files, only references.
@@ -176,4 +202,5 @@ Invoices, expense receipts, contracts, proposals, and reports are created by han
 5. ✅ Dropbox link field on Invoices and Expenses (stored in `drive_file_url`; rows show a "View file" / "View receipt" link).
 6. ⏳ Computed Projections view, using retainer recurring revenue plus the Sales pipeline and the other Money tables.
 7. ✅ Entry forms: the "New …" button on Retainers, Proposals, Invoices, Expenses, and Subscriptions opens a modal that POSTs to the matching endpoint. Editing existing rows (for example marking an invoice paid) is not built yet; the PATCH endpoints exist.
-8. ⏳ Auth and team roles, then the agency brain (pgvector knowledge base, same Postgres) last.
+8. ✅ Finance page with payroll and freelancer ledger (`team_payments`, `lib/money-team.js`, `lib/money-finance.js`, `api/finance.js`). It stores salary data behind an open API, so login comes next.
+9. ⏳ Auth and team roles, then the agency brain (pgvector knowledge base, same Postgres) last.
