@@ -1,8 +1,9 @@
+const { withAuth } = require('../lib/auth');
 const { getGoogleAccessToken } = require('../lib/google-auth');
 
 const DEFAULT_CALENDAR_ID = 'hello@ribahaus.com';
 
-module.exports = async (req, res) => {
+module.exports = withAuth(async (req, res) => {
           res.setHeader('Access-Control-Allow-Origin', 'https://omr16552.github.io');
           res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
@@ -95,4 +96,4 @@ module.exports = async (req, res) => {
           } catch (err) {
                       res.status(500).json({ status: 'error', message: err.message, details: err.details || null });
           }
-};
+});
